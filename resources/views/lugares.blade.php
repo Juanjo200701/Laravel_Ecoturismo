@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Lugares</title>
-    <link rel="stylesheet" href="css/lugares.css">
+    <link rel="stylesheet" href="public/css/lugares.css">
 </head>
 <body>
 <div class="contenedorTodo">

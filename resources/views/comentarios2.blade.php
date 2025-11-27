@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Reseñas y Comentarios</title>
-    <link rel="stylesheet" href="css/comentarios.css">
+    <link rel="stylesheet" href="public/css/comentarios.css">
     <link rel="icon" href="imagenes/iconoecoturismo.jpg">
     <script src="js/comentarios.js"></script>
 

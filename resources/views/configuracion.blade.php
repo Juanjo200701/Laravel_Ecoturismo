@@ -14,7 +14,7 @@ $mensaje = '';
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Configuración - RisaraldaEcoTurismo</title>
-    <link rel="stylesheet" href="css/configuracion.css">
+    <link rel="stylesheet" href="public/css/configuracion.css">
     <link rel="icon" href="imagenes/iconoecoturismo.jpg">
 </head>
 <body>

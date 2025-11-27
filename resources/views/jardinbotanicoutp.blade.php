@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Jardín Botánico UTP - Información Detallada</title>
     <link rel="stylesheet" href="css/detallelugar.css">
-    <link rel="icon" href="imagenes/iconoecoturismo.jpg">
+    <link rel="icon" href="public/imagenes/iconoecoturismo.jpg">
 </head>
 <body>
     <div class="contenedor-detalle">

@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Puente Bernardo Arango - Información Detallada</title>
-    <link rel="stylesheet" href="css/detallelugar.css">
+    <link rel="stylesheet" href="public/css/detallelugar.css">
     <link rel="icon" href="imagenes/iconoecoturismo.jpg">
 </head>
 <body>
