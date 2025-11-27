@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="{{ asset('public/css/pagcentral.css') }}">
+    <link rel="stylesheet" href="{{ asset('public/css/pagcentral2.css') }}">
     <link
   rel="stylesheet"
   href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"
@@ -24,7 +24,7 @@
             <h2>¿Cómo deseas continuar?</h2>
             <p>Por favor, selecciona una opción para continuar navegando:</p>
             <button id="register">Registrarse</button>
-            <button id="loggin">Iniciar Sesión</button>
+            <button id="loggin"> <a href="resources/views/login.blade.php">Iniciar Sesión</a></button>
             <button id="guest">Continuar como Invitado</button>
         </div>
     </div>

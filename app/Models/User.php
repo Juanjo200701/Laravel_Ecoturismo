@@ -13,14 +13,33 @@ class User extends Authenticatable
     use HasFactory, Notifiable;
 
     /**
+     * Table associated with the model.
+     *
+     * @var string
+     */
+    protected $table = 'usuarios';
+    /**
+     * If the model should be timestamped.
+     * We map the created timestamp to `fecha_registro` and disable updated_at
+     * because the existing table doesn't have an `updated_at` column.
+     *
+     * @var bool
+     */
+    public $timestamps = true;
+
+    const CREATED_AT = 'fecha_registro';
+    const UPDATED_AT = null;
+
+    /**
      * The attributes that are mass assignable.
      *
      * @var list<string>
      */
     protected $fillable = [
-        'name',
+        'username',
         'email',
         'password',
+        'fecha_registro',
     ];
 
     /**
@@ -38,11 +57,12 @@ class User extends Authenticatable
      *
      * @return array<string, string>
      */
-    protected function casts(): array
-    {
-        return [
-            'email_verified_at' => 'datetime',
-            'password' => 'hashed',
-        ];
-    }
+    /**
+     * The attributes that should be cast.
+     *
+     * @var array<string,string>
+     */
+    protected $casts = [
+        'email_verified_at' => 'datetime',
+    ];
 }
