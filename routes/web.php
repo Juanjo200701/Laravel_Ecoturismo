@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\Auth\RegisterController;
 
 Route::get('/', function () {
     return view('pagcentral');
@@ -15,6 +16,13 @@ Route::get('/pagcentral2', function () {
 
 Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
 Route::post('/login', [LoginController::class, 'login']);
+
+// Logout (POST) handled by LoginController
+Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
+
+// Registro: show form y procesar registro
+Route::get('/registro', [RegisterController::class, 'create'])->name('registro');
+Route::post('/registro', [RegisterController::class, 'store'])->name('registro.store');
 
 // Rutas para vistas estáticas usadas en la UI
 Route::view('/comentarios', 'comentarios')->name('comentarios');

@@ -29,8 +29,7 @@ Route::view('/jardinbotanicoutp', 'jardinbotanicoutp')->name('jardinbotanicoutp'
 Route::view('/kaukitabosquereserva', 'kaukitabosquereserva')->name('kaukitabosquereserva');
 Route::view('/lagolapradera', 'lagolapradera')->name('lagolapradera');
 Route::view('/lagunadelotun', 'lagunadelotun')->name('lagunadelotun');
-Route::view('/login', 'login')->name('login');
-Route::view('/logout', 'logout')->name('logout');
+// Logout handled by LoginController@logout
 Route::view('/lugares', 'lugares')->name('lugares');
 Route::view('/lugaresmontañosos', 'lugaresmontañosos')->name('lugaresmontañosos');
 Route::view('/lugaresmontañosos2', 'lugaresmontañosos2')->name('lugaresmontañosos2');
@@ -48,7 +47,7 @@ Route::view('/piedrasmarcadas', 'piedrasmarcadas')->name('piedrasmarcadas');
 Route::view('/politicas', 'politicas')->name('politicas');
 Route::view('/politicas2', 'politicas2')->name('politicas2');
 Route::view('/puentebernardoarango', 'puentebernardoarango')->name('puentebernardoarango');
-Route::view('/registro', 'registro')->name('registro');
+// login and registro are handled by controllers/routes defined in web.php
 Route::view('/reservaforestallanona', 'reservaforestallanona')->name('reservaforestallanona');
 Route::view('/reservanaturalcerrogobia', 'reservanaturalcerrogobia')->name('reservanaturalcerrogobia');
 Route::view('/riosanjose', 'riosanjose')->name('riosanjose');
