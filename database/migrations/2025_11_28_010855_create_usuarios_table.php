@@ -10,7 +10,7 @@ return new class extends Migration
     {
         Schema::create('usuarios', function (Blueprint $table) {
             $table->id();
-            $table->string('username')->unique();
+            $table->string('name')->unique();
             $table->string('email')->unique()->nullable();
             $table->string('password');
             $table->timestamp('fecha_registro')->useCurrent();
