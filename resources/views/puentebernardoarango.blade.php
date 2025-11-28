@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Puente Bernardo Arango - Información Detallada</title>
-    <link rel="stylesheet" href="public/css/detallelugar.css">
+    <link rel="stylesheet" href="{{ asset('public/css/detallelugar.css') }}">
     <link rel="icon" href="imagenes/iconoecoturismo.jpg">
 </head>
 <body>
@@ -15,11 +15,11 @@
         </header>
 
         <div class="galeria">
-            <img src="imagenes/bernardo1.jpg" alt="Puente Bernardo Arango" class="imagen-principal">
+            <img src="{{ asset('imagenes/bernardo1.jpg') }}" alt="Puente Bernardo Arango" class="imagen-principal">
             <div class="miniaturas">
-                <img src="imagenes/bernardo.jpg" alt="Vista del río" class="miniatura">
-                <img src="imagenes/bernardo7.jpg" alt="Atardecer" class="miniatura">
-                <img src="imagenes/puente4.jpg" alt="Vista panorámica" class="miniatura">
+                <img src="{{ asset('imagenes/bernardo.jpg') }}" alt="Vista del río" class="miniatura">
+                <img src="{{ asset('imagenes/bernardo7.jpg') }}" alt="Atardecer" class="miniatura">
+                <img src="{{ asset('imagenes/puente4.jpg') }}" alt="Vista panorámica" class="miniatura">
             </div>
         </div>
 
@@ -145,10 +145,10 @@
         </section>
 
         <div class="botones">
-            <a href="lugaresmontañosos2.html" class="boton-volver">Volver a Lugares</a>
+            <a href="{{ route('lugaresmontañosos2') }}" class="boton-volver">Volver a Lugares</a>
             <button class="boton-favorito" data-lugar="Puente Bernardo Arango">🤍</button>
         </div>
     </div>
-    <script src="js/favoritos.js"></script>
+    <script src="{{ asset('js/favoritos.js') }}"></script>
 </body>
 </html>

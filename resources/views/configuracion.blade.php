@@ -1,6 +1,6 @@
 <?php
 session_start();
-require_once 'conexion.php';
+require_once base_path('resources/views/conexion.php');
 
 $mensaje = '';
 
@@ -14,14 +14,14 @@ $mensaje = '';
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Configuración - RisaraldaEcoTurismo</title>
-    <link rel="stylesheet" href="public/css/configuracion.css">
-    <link rel="icon" href="imagenes/iconoecoturismo.jpg">
+    <link rel="stylesheet" href="{{ asset('css/configuracion.css') }}">
+    <link rel="icon" href="{{ asset('imagenes/iconoecoturismo.jpg') }}">
 </head>
 <body>
     <header>
         <div class="header-container">
             <div class="titulos">
-                <img src="imagenes/iconoecoturismo.jpg" width="70px" alt="Logo">
+                <img src="{{ asset('imagenes/iconoecoturismo.jpg') }}" width="70px" alt="Logo">
                 <h2 class="risaralda">RisaraldaEcoTurismo</h2>
             </div>
             <a href="pagcentral2.php" class="volver">Volver</a>
@@ -43,7 +43,7 @@ $mensaje = '';
                 <span>Cambia Tu Contraseña</span>
             </div>
             <div class="menu-item" data-section="Cerrar Sesión">
-                <a href="pagcentral.html" id="cerrar-sesion"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="15" viewBox="0 0 48 48"><g fill="none" stroke="#2c3e50" stroke-linecap="round" stroke-linejoin="round" stroke-width="4"><path d="M23.9917 6H6V42H24"/><path d="M33 33L42 24L33 15"/><path d="M16 23.9917H42"/></g></svg> Cerrar Sesión</a>
+                <a href="{{ route('pagcentral') }}" id="cerrar-sesion"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="15" viewBox="0 0 48 48"><g fill="none" stroke="#2c3e50" stroke-linecap="round" stroke-linejoin="round" stroke-width="4"><path d="M23.9917 6H6V42H24"/><path d="M33 33L42 24L33 15"/><path d="M16 23.9917H42"/></g></svg> Cerrar Sesión</a>
 
 
             </div>
@@ -107,6 +107,6 @@ $mensaje = '';
         </div>
     </main>
 
-    <script src="js/configuracion.js"></script>
+    <script src="{{ asset('js/configuracion.js') }}"></script>
 </body>
 </html>

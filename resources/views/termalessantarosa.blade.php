@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Termales Santa Rosa - Información Detallada</title>
-    <link rel="stylesheet" href="public/css/detallelugar.css">
+    <link rel="stylesheet" href="{{ asset('public/css/detallelugar.css') }}">
     <link rel="icon" href="imagenes/iconoecoturismo.jpg">
 </head>
 <body>
@@ -15,11 +15,11 @@
         </header>
 
         <div class="galeria">
-            <img src="imagenes/termales.jpg" alt="Termales de Santa Rosa" class="imagen-principal">
+            <img src="{{ asset('imagenes/termales.jpg') }}" alt="Termales de Santa Rosa" class="imagen-principal">
             <div class="miniaturas">
-                <img src="imagenes/termales-2.jpg" alt="Piscinas termales" class="miniatura">
-                <img src="imagenes/termales-3.jpg" alt="Cascada termal" class="miniatura">
-                <img src="imagenes/termales-4.jpg" alt="Paisaje termal" class="miniatura">
+                <img src="{{ asset('imagenes/termales-2.jpg') }}" alt="Piscinas termales" class="miniatura">
+                <img src="{{ asset('imagenes/termales-3.jpg') }}" alt="Cascada termal" class="miniatura">
+                <img src="{{ asset('imagenes/termales-4.jpg') }}" alt="Paisaje termal" class="miniatura">
             </div>
         </div>
 
@@ -176,10 +176,10 @@
                     <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3975.577357487734!2d-75.55565172650576!3d4.842392740416028!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8e3883aec914e46d%3A0x105cdc905df715f0!2sTermales%20Santa%20Rosa%20de%20Cabal!5e0!3m2!1ses!2sco!4v1744947068349!5m2!1ses!2sco" width="100%" height="400" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>        </section>
 
         <div class="botones">
-            <a href="paraisosacuaticos2.html" class="boton-volver">Volver a Lugares</a>
+            <a href="{{ route('paraisosacuaticos2') }}" class="boton-volver">Volver a Lugares</a>
             <button class="boton-favorito" data-lugar="Termales de Santa Rosa">🤍</button>
         </div>
     </div>
-    <script src="js/favoritos.js"></script>
+    <script src="{{ asset('js/favoritos.js') }}"></script>
 </body>
 </html>

@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Café Hacienda Horizonte - Información Detallada</title>
-    <link rel="stylesheet" href="public/css/detallelugar.css">
+    <link rel="stylesheet" href="{{ asset('css/detallelugar.css') }}">
     <link rel="icon" href="imagenes/iconoecoturismo.jpg">
 </head>
 <body>
@@ -15,11 +15,11 @@
         </header>
 
         <div class="galeria">
-            <img src="imagenes/horizonte.jpg" alt="Hacienda Horizonte" class="imagen-principal">
+            <img src="{{ asset('imagenes/horizonte.jpg') }}" alt="Hacienda Horizonte" class="imagen-principal">
             <div class="miniaturas">
-                <img src="imagenes/horizonte2.jpeg" alt="Cultivos" class="miniatura">
-                <img src="imagenes/horizonte3.jpg" alt="Proceso" class="miniatura">
-                <img src="imagenes/horizonte4.jpg" alt="Paisaje" class="miniatura">
+                <img src="{{ asset('imagenes/horizonte2.jpeg') }}" alt="Cultivos" class="miniatura">
+                <img src="{{ asset('imagenes/horizonte3.jpg') }}" alt="Proceso" class="miniatura">
+                <img src="{{ asset('imagenes/horizonte4.jpg') }}" alt="Paisaje" class="miniatura">
             </div>
         </div>
 
@@ -183,10 +183,10 @@
         </section>
 
         <div class="botones">
-            <a href="territoriosdelcafe2.html" class="boton-volver">Volver a Lugares</a>
+            <a href="{{ route('territoriosdelcafe2') }}" class="boton-volver">Volver a Lugares</a>
             <button class="boton-favorito" data-lugar="Café Hacienda Horizonte">🤍</button>
         </div>
     </div>
-    <script src="js/favoritos.js"></script>
+    <script src="{{ asset('js/favoritos.js') }}"></script>
 </body>
 </html>

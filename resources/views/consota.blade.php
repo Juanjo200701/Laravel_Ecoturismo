@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Parque Acuático Consotá - Información Detallada</title>
-    <link rel="stylesheet" href="public/css/detallelugar.css">
+    <link rel="stylesheet" href="{{ asset('css/detallelugar.css') }}">
     <link rel="icon" href="imagenes/iconoecoturismo.jpg">
 </head>
 <body>
@@ -15,11 +15,11 @@
         </header>
 
         <div class="galeria">
-            <img src="imagenes/consota.jpg" alt="Parque Acuático Consotá" class="imagen-principal">
+            <img src="{{ asset('imagenes/consota.jpg') }}" alt="Parque Acuático Consotá" class="imagen-principal">
             <div class="miniaturas">
-                <img src="imagenes/consota-2.webp" alt="Piscinas" class="miniatura">
-                <img src="imagenes/consota-3.webp" alt="Toboganes" class="miniatura">
-                <img src="imagenes/consota-4.webp" alt="Zonas verdes" class="miniatura">
+                <img src="{{ asset('imagenes/consota-2.webp') }}" alt="Piscinas" class="miniatura">
+                <img src="{{ asset('imagenes/consota-3.webp') }}" alt="Toboganes" class="miniatura">
+                <img src="{{ asset('imagenes/consota-4.webp') }}" alt="Zonas verdes" class="miniatura">
             </div>
         </div>
 
@@ -190,10 +190,10 @@
         </section>
 
         <div class="botones">
-            <a href="paraisosacuaticos2.html" class="boton-volver">Volver a Lugares</a>
+            <a href="{{ route('paraisosacuaticos2') }}" class="boton-volver">Volver a Lugares</a>
             <button class="boton-favorito" data-lugar="Parque Acuático Consotá">🤍</button>
         </div>
     </div>
-    <script src="js/favoritos.js"></script>
+    <script src="{{ asset('js/favoritos.js') }}"></script>
 </body>
 </html>

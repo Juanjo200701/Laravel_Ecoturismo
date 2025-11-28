@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Contacto</title>
-    <link rel="stylesheet" href="public/css/contacto.css">
+    <link rel="stylesheet" href="{{ asset('css/contacto.css') }}">
     <link rel="icon" href="imagenes/iconoecoturismo.jpg">
 </head>
 
@@ -18,18 +18,18 @@
                 </p>
                 <div class="info">
                     <div class="information">
-                        <img src="imagenes/maps-and-location.png" class="icon" alt="">
+                        <img src="{{ asset('imagenes/maps-and-location.png') }}" class="icon" alt="">
                         <p>Dosquebradas-Pereira</p>
                     </div>
                     <div class="information">
-                        <img src="imagenes/correo-electronico.png" class="icon" alt="">
+                        <img src="{{ asset('imagenes/correo-electronico.png') }}" class="icon" alt="">
                         <a href="mailto:proyectoecoturismo2@gmail.com">
 
                             <p>proyectoecoturismo2@gmail.com</p>
                         </a>
                     </div>
                     <div class="information">
-                        <img src="imagenes/telefono.png" class="icon" alt="">
+                        <img src="{{ asset('imagenes/telefono.png') }}" class="icon" alt="">
                         <a href="tel:3134152020">
 
                             <p>3134152020</p>
@@ -43,17 +43,17 @@
                     <p>Conéctate con nosotros:</p>
                     <div class="social-icon">
                         <a href="https://www.facebook.com/share/1Bf6vo7qJA/?mibextid=wwXIfr">
-                            <img src="imagenes/iconofb.png" width="30px" alt="">
+                            <img src="{{ asset('imagenes/iconofb.png') }}" width="30px" alt="">
                         </a>
 
                         <a href="https://wa.link/tuxrjn">
-                            <img src="imagenes/iconowp.png" width="30px" alt="">
+                            <img src="{{ asset('imagenes/iconowp.png') }}" width="30px" alt="">
                         </a>
 
                         <a href="#">
-                            <img src="imagenes/iconoig.png" width="30px" alt="">
+                            <img src="{{ asset('imagenes/iconoig.png') }}" width="30px" alt="">
                         </a>
-                        <button id="volver"><a href="pagcentral.html">Volver</a></button>
+                        <button id="volver"><a href="{{ route('pagcentral') }}">Volver</a></button>
                     </div>
                 </div>
             </div>

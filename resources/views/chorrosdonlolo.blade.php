@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Chorros de Don Lolo - Información Detallada</title>
-    <link rel="stylesheet" href="public/css/detallelugar.css">
+    <link rel="stylesheet" href="{{ asset('css/detallelugar.css') }}">
     <link rel="icon" href="../imagenes/iconoecoturismo.jpg">
 </head>
 <body>
@@ -15,11 +15,11 @@
         </header>
 
         <div class="galeria">
-            <img src="imagenes/lolo.jpg" alt="Chorros de Don Lolo" class="imagen-principal">
+            <img src="{{ asset('imagenes/lolo.jpg') }}" alt="Chorros de Don Lolo" class="imagen-principal">
             <div class="miniaturas">
-                <img src="imagenes/lolo-2.jpg" alt="Vista cascada" class="miniatura">
-                <img src="imagenes/lolo-3.jpg" alt="Senderos" class="miniatura">
-                <img src="imagenes/lolo-4.webp" alt="Paisaje" class="miniatura">
+                <img src="{{ asset('imagenes/lolo-2.jpg') }}" alt="Vista cascada" class="miniatura">
+                <img src="{{ asset('imagenes/lolo-3.jpg') }}" alt="Senderos" class="miniatura">
+                <img src="{{ asset('imagenes/lolo-4.webp') }}" alt="Paisaje" class="miniatura">
             </div>
         </div>
 
@@ -158,10 +158,10 @@
         </section>
 
         <div class="botones">
-            <a href="paraisosacuaticos2.html" class="boton-volver">Volver a Lugares</a>
+            <a href="{{ route('paraisosacuaticos2') }}" class="boton-volver">Volver a Lugares</a>
             <button class="boton-favorito" data-lugar="Chorros de Don Lolo">🤍</button>
         </div>
     </div>
-    <script src="js/favoritos.js"></script>
+    <script src="{{ asset('js/favoritos.js') }}"></script>
 </body>
 </html>

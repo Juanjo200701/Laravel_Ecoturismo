@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cascada Los Frailes - Información Detallada</title>
-    <link rel="stylesheet" href="public/css/detallelugar.css">
+    <link rel="stylesheet" href="{{ asset('css/detallelugar.css') }}">
     <link rel="icon" href="imagenes/iconoecoturismo.jpg">
 </head>
 <body>
@@ -15,11 +15,11 @@
         </header>
 
         <div class="galeria">
-            <img src="imagenes/frailes2.webp" alt="Cascada Los Frailes" class="imagen-principal">
+            <img src="{{ asset('imagenes/frailes2.webp') }}" alt="Cascada Los Frailes" class="imagen-principal">
             <div class="miniaturas">
-                <img src="imagenes/frailes7.webp" alt="Vista cascada" class="miniatura">
-                <img src="imagenes/frailes3.jpg" alt="Sendero" class="miniatura">
-                <img src="imagenes/frailes8.webp" alt="Paisaje" class="miniatura">
+                <img src="{{ asset('imagenes/frailes7.webp') }}" alt="Vista cascada" class="miniatura">
+                <img src="{{ asset('imagenes/frailes3.jpg') }}" alt="Sendero" class="miniatura">
+                <img src="{{ asset('imagenes/frailes8.webp') }}" alt="Paisaje" class="miniatura">
             </div>
         </div>
 
@@ -165,10 +165,10 @@
         </section>
 
         <div class="botones">
-            <a href="paraisosacuaticos2.html" class="boton-volver">Volver a Lugares</a>
+            <a href="{{ route('paraisosacuaticos2') }}" class="boton-volver">Volver a Lugares</a>
             <button class="boton-favorito" data-lugar="Cascada Los Frailes">🤍</button>
         </div>
     </div>
-    <script src="js/favoritos.js"></script>
+    <script src="{{ asset('js/favoritos.js') }}"></script>
 </body>
 </html>

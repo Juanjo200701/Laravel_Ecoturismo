@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>DMI Agualinda - Información Detallada</title>
-    <link rel="stylesheet" href="public/css/detallelugar.css">
+    <link rel="stylesheet" href="{{ asset('css/detallelugar.css') }}">
     <link rel="icon" href="imagenes/iconoecoturismo.jpg">
 </head>
 <body>
@@ -15,11 +15,11 @@
         </header>
 
         <div class="galeria">
-            <img src="imagenes/distritomanejo8.jpg" alt="DMI Agualinda" class="imagen-principal">
+            <img src="{{ asset('imagenes/distritomanejo8.jpg') }}" alt="DMI Agualinda" class="imagen-principal">
             <div class="miniaturas">
-                <img src="imagenes/distritomanejo.jpg" alt="Senderos" class="miniatura">
-                <img src="imagenes/distritomanejo3.jpg" alt="Flora" class="miniatura">
-                <img src="imagenes/distritomanejo4.jpg" alt="Paisaje" class="miniatura">
+                <img src="{{ asset('imagenes/distritomanejo.jpg') }}" alt="Senderos" class="miniatura">
+                <img src="{{ asset('imagenes/distritomanejo3.jpg') }}" alt="Flora" class="miniatura">
+                <img src="{{ asset('imagenes/distritomanejo4.jpg') }}" alt="Paisaje" class="miniatura">
             </div>
         </div>
 
@@ -174,10 +174,10 @@
         </section>
 
         <div class="botones">
-            <a href="lugaresmontañosos2.html" class="boton-volver">Volver a Lugares</a>
+            <a href="{{ route('lugaresmontañosos2') }}" class="boton-volver">Volver a Lugares</a>
             <button class="boton-favorito" data-lugar="DMI Agualinda">🤍</button>
         </div>
     </div>
-    <script src="js/favoritos.js"></script>
+    <script src="{{ asset('js/favoritos.js') }}"></script>
 </body>
 </html>

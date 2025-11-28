@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Reserva Forestal La Nona - Información Detallada</title>
-    <link rel="stylesheet" href="public/css/detallelugar.css">
+    <link rel="stylesheet" href="{{ asset('public/css/detallelugar.css') }}">
     <link rel="icon" href="imagenes/iconoecoturismo.jpg">
 </head>
 <body>
@@ -15,11 +15,11 @@
         </header>
 
         <div class="galeria">
-            <img src="imagenes/lanona9.jpg" alt="Reserva La Nona" class="imagen-principal">
+            <img src="{{ asset('imagenes/lanona9.jpg') }}" alt="Reserva La Nona" class="imagen-principal">
             <div class="miniaturas">
-                <img src="imagenes/lanona.jpg" alt="Senderos" class="miniatura">
-                <img src="imagenes/lanona2.jpg" alt="Flora" class="miniatura">
-                <img src="imagenes/lanona6.jpg" alt="Paisaje" class="miniatura">
+                <img src="{{ asset('imagenes/lanona.jpg') }}" alt="Senderos" class="miniatura">
+                <img src="{{ asset('imagenes/lanona2.jpg') }}" alt="Flora" class="miniatura">
+                <img src="{{ asset('imagenes/lanona6.jpg') }}" alt="Paisaje" class="miniatura">
             </div>
         </div>
 
@@ -167,10 +167,10 @@
         </section>
 
         <div class="botones">
-            <a href="lugaresmontañosos2.html" class="boton-volver">Volver a Lugares</a>
+            <a href="{{ route('lugaresmontañosos2') }}" class="boton-volver">Volver a Lugares</a>
             <button class="boton-favorito" data-lugar="Reserva Forestal La Nona">🤍</button>
         </div>
     </div>
-    <script src="js/favoritos.js"></script>
+    <script src="{{ asset('js/favoritos.js') }}"></script>
 </body>
 </html>

@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Parque Las Araucarias - Información Detallada</title>
-    <link rel="stylesheet" href="public/css/detallelugar.css">
+    <link rel="stylesheet" href="{{ asset('public/css/detallelugar.css') }}">
     <link rel="icon" href="imagenes/iconoecoturismo.jpg">
 </head>
 <body>
@@ -15,11 +15,11 @@
         </header>
 
         <div class="galeria">
-            <img src="imagenes/araucarias.jpg" alt="Parque Las Araucarias" class="imagen-principal">
+            <img src="{{ asset('imagenes/araucarias.jpg') }}" alt="Parque Las Araucarias" class="imagen-principal">
             <div class="miniaturas">
-                <img src="imagenes/araucarias2.jpg" alt="Árboles" class="miniatura">
-                <img src="imagenes/araucarias3.webp" alt="Senderos" class="miniatura">
-                <img src="imagenes/araucarias4.jpg" alt="Áreas recreativas" class="miniatura">
+                <img src="{{ asset('imagenes/araucarias2.jpg') }}" alt="Árboles" class="miniatura">
+                <img src="{{ asset('imagenes/araucarias3.webp') }}" alt="Senderos" class="miniatura">
+                <img src="{{ asset('imagenes/araucarias4.jpg') }}" alt="Áreas recreativas" class="miniatura">
             </div>
         </div>
 
@@ -170,10 +170,10 @@
         </section>
 
         <div class="botones">
-            <a href="lugaresmontañosos2.html" class="boton-volver">Volver a Lugares</a>
+            <a href="{{ route('lugaresmontañosos2') }}" class="boton-volver">Volver a Lugares</a>
             <button class="boton-favorito" data-lugar="Parque Las Araucarias">🤍</button>
         </div>
     </div>
-    <script src="js/favoritos.js"></script>
+    <script src="{{ asset('js/favoritos.js') }}"></script>
 </body>
 </html>

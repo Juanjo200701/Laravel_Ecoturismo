@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="public/css/politicas.css">
+    <link rel="stylesheet" href="{{ asset('public/css/politicas.css') }}">
     <title>Políticas de Privacidad</title>
 </head>
 <body>
@@ -14,7 +14,7 @@
             </div>
             <nav class="navbar">
                 <a href="pagcentral2.html">Inicio</a>
-                <a href="contacto.html">Contacto</a>
+                <a href="{{ route('contacto') }}">Contacto</a>
             </nav>
         </div>
     </header>

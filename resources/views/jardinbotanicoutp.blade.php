@@ -4,8 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Jardín Botánico UTP - Información Detallada</title>
-    <link rel="stylesheet" href="css/detallelugar.css">
-    <link rel="icon" href="public/imagenes/iconoecoturismo.jpg">
+    <link rel="stylesheet" href="{{ asset('css/detallelugar.css') }}">
+    <link rel="icon" href="{{ asset('imagenes/iconoecoturismo.jpg') }}">
 </head>
 <body>
     <div class="contenedor-detalle">
@@ -15,11 +15,11 @@
         </header>
 
         <div class="galeria">
-            <img src="imagenes/jardin.jpeg" alt="Jardín Botánico UTP" class="imagen-principal">
+            <img src="{{ asset('imagenes/jardin.jpeg') }}" alt="Jardín Botánico UTP" class="imagen-principal">
             <div class="miniaturas">
-                <img src="imagenes/jardin2.jpeg" alt="Flora del jardín" class="miniatura">
-                <img src="imagenes/jardin3.jpg" alt="Senderos" class="miniatura">
-                <img src="imagenes/jardin4.jpg" alt="Especies nativas" class="miniatura">
+                <img src="{{ asset('imagenes/jardin2.jpeg') }}" alt="Flora del jardín" class="miniatura">
+                <img src="{{ asset('imagenes/jardin3.jpg') }}" alt="Senderos" class="miniatura">
+                <img src="{{ asset('imagenes/jardin4.jpg') }}" alt="Especies nativas" class="miniatura">
             </div>
         </div>
 
@@ -170,10 +170,10 @@
         </section>
 
         <div class="botones">
-            <a href="lugaresmontañosos2.html" class="boton-volver">Volver a Lugares</a>
+            <a href="{{ route('lugaresmontañosos2') }}" class="boton-volver">Volver a Lugares</a>
             <button class="boton-favorito" data-lugar="Jardín Botánico">🤍</button>
         </div>
     </div>
-    <script src="js/favoritos.js"></script>
+    <script src="{{ asset('js/favoritos.js') }}"></script>
 </body>
 </html>

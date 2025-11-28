@@ -1,6 +1,6 @@
 <?php
 session_start();
-require_once 'conexion.php';
+require_once base_path('resources/views/conexion.php');
 
 $mensaje = '';
 
@@ -70,8 +70,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="public/css/registro.css">
-    <link rel="icon" href="imagenes/iconoecoturismo.jpg">
+    <link rel="stylesheet" href="{{ asset('css/registro.css') }}">
+    <link rel="icon" href="{{ asset('imagenes/iconoecoturismo.jpg') }}">
     <title>Registro</title>
 </head>
 <body>
@@ -80,7 +80,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </header>
     <div class="contenedor">
         <div class="login">
-            <form id="formulario" action="pagcentral2.php" method="POST">
+            <form id="formulario" action="{{ url()->current() }}" method="POST">
                 <h3>Regístrate...</h3>
                 <label for="username">Nombre de usuario:</label>
                 <input type="text" id="username" name="username" required>
@@ -95,7 +95,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <?php if (!empty($mensaje)): ?>
                     <div><?= $mensaje ?></div>
                 <?php endif; ?>
-                <p><strong>¿Ya tienes una cuenta?</strong><br><a href="login.html">Inicia Sesión</a></p>
+                <p><strong>¿Ya tienes una cuenta?</strong><br><a href="{{ route('login') }}">Inicia Sesión</a></p>
                 <button id="btn" type="submit">Ingresar</button>
             </form>
         </div>
@@ -103,6 +103,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <p>© 2025 Risaralda EcoTurismo</p>
         </footer>
     </div>
-    <script type="text/javascript" src="js/registro.js"></script>
+    <script type="text/javascript" src="{{ asset('js/registro.js') }}"></script>
 </body>
 </html>

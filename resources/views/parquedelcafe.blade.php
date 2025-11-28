@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Parque Metropolitano del Café - Información Detallada</title>
-    <link rel="stylesheet" href="public/css/detallelugar.css">
+    <link rel="stylesheet" href="{{ asset('public/css/detallelugar.css') }}">
     <link rel="icon" href="imagenes/iconoecoturismo.jpg">
 </head>
 <body>
@@ -15,11 +15,11 @@
         </header>
 
         <div class="galeria">
-            <img src="imagenes/parquecafee.jpg" alt="Parque Metropolitano del Café" class="imagen-principal">
+            <img src="{{ asset('imagenes/parquecafee.jpg') }}" alt="Parque Metropolitano del Café" class="imagen-principal">
             <div class="miniaturas">
-                <img src="imagenes/parquecafe-2.jpg" alt="Instalaciones" class="miniatura">
-                <img src="imagenes/parquecafe-3.jpg" alt="Zonas verdes" class="miniatura">
-                <img src="imagenes/parquecafe-4.jpg" alt="Áreas deportivas" class="miniatura">
+                <img src="{{ asset('imagenes/parquecafe-2.jpg') }}" alt="Instalaciones" class="miniatura">
+                <img src="{{ asset('imagenes/parquecafe-3.jpg') }}" alt="Zonas verdes" class="miniatura">
+                <img src="{{ asset('imagenes/parquecafe-4.jpg') }}" alt="Áreas deportivas" class="miniatura">
             </div>
         </div>
 
@@ -155,10 +155,10 @@
         </section>
 
         <div class="botones">
-            <a href="paraisosacuaticos2.html" class="boton-volver">Volver a Lugares</a>
+            <a href="{{ route('paraisosacuaticos2') }}" class="boton-volver">Volver a Lugares</a>
             <button class="boton-favorito" data-lugar="Parque Metropolitano del Café">🤍</button>
         </div>
     </div>
-    <script src="js/favoritos.js"></script>
+    <script src="{{ asset('js/favoritos.js') }}"></script>
 </body>
 </html>

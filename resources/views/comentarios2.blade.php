@@ -4,9 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Reseñas y Comentarios</title>
-    <link rel="stylesheet" href="public/css/comentarios.css">
+    <link rel="stylesheet" href="{{ asset('css/comentarios.css') }}">
     <link rel="icon" href="imagenes/iconoecoturismo.jpg">
-    <script src="js/comentarios.js"></script>
+    <script src="{{ asset('js/comentarios.js') }}"></script>
 
 </head>
 <body>
@@ -23,7 +23,7 @@
         
         <div class="in-box">
             <div class="bx-img">
-                <img src="imagenes/usuario.jpg" >
+                <img src="{{ asset('imagenes/usuario.jpg') }}" >
             </div>
             <div class="bxx-text">
                 <h4>Karla Ospina</h4>
@@ -45,7 +45,7 @@
         
         <div class="in-box">
             <div class="bx-img">
-                <img src="imagenes/usuario.jpg" >
+                <img src="{{ asset('imagenes/usuario.jpg') }}" >
             </div>
             <div class="bxx-text">
                 <h4>Frank Navarro</h4>
@@ -66,7 +66,7 @@
     
     <div class="in-box">
         <div class="bx-img">
-            <img src="imagenes/usuario.jpg" >
+            <img src="{{ asset('imagenes/usuario.jpg') }}" >
         </div>
         <div class="bxx-text">
             <h4>Joan Montoya</h4>
@@ -90,7 +90,7 @@
     <input type="submit" value="Enviar" class="btn">
 </section>
 </form>
-<a href="pagcentral.html" class="boton-volver">Volver</a>
+<a href="{{ route('pagcentral') }}" class="boton-volver">Volver</a>
 </div>
 </body>
 </html>

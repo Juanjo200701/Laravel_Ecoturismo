@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tambo El Privilegio - Información Detallada</title>
-    <link rel="stylesheet" href="public/css/detallelugar.css">
+    <link rel="stylesheet" href="{{ asset('public/css/detallelugar.css') }}">
     <link rel="icon" href="imagenes/iconoecoturismo.jpg">
 </head>
 <body>
@@ -15,11 +15,11 @@
         </header>
 
         <div class="galeria">
-            <img src="imagenes/tambo8.jpg" alt="Tambo El Privilegio" class="imagen-principal">
+            <img src="{{ asset('imagenes/tambo8.jpg') }}" alt="Tambo El Privilegio" class="imagen-principal">
             <div class="miniaturas">
-                <img src="imagenes/tambo1.jpg" alt="Vista panorámica" class="miniatura">
-                <img src="imagenes/tambo.jpg" alt="Instalaciones" class="miniatura">
-                <img src="imagenes/tambo4.webp" alt="Atardecer" class="miniatura">
+                <img src="{{ asset('imagenes/tambo1.jpg') }}" alt="Vista panorámica" class="miniatura">
+                <img src="{{ asset('imagenes/tambo.jpg') }}" alt="Instalaciones" class="miniatura">
+                <img src="{{ asset('imagenes/tambo4.webp') }}" alt="Atardecer" class="miniatura">
             </div>
         </div>
 
@@ -129,10 +129,10 @@
         </section>
 
         <div class="botones">
-            <a href="territoriosdelcafe2.html" class="boton-volver">Volver a Lugares</a>
+            <a href="{{ route('territoriosdelcafe2') }}" class="boton-volver">Volver a Lugares</a>
             <button class="boton-favorito" data-lugar="Tambo El Privilegio">🤍</button>
         </div>
     </div>
-    <script src="js/favoritos.js"></script>
+    <script src="{{ asset('js/favoritos.js') }}"></script>
 </body>
 </html>

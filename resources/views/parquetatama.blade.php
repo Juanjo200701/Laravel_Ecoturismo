@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Parque Nacional Natural Tatamá - Información Detallada</title>
-    <link rel="stylesheet" href="public/css/detallelugar.css">
+    <link rel="stylesheet" href="{{ asset('public/css/detallelugar.css') }}">
     <link rel="icon" href="imagenes/iconoecoturismo.jpg">
 </head>
 <body>
@@ -15,11 +15,11 @@
         </header>
 
         <div class="galeria">
-            <img src="imagenes/tatama.jpg" alt="Parque Nacional Natural Tatamá" class="imagen-principal">
+            <img src="{{ asset('imagenes/tatama.jpg') }}" alt="Parque Nacional Natural Tatamá" class="imagen-principal">
             <div class="miniaturas">
-                <img src="imagenes/tatama2.jpg" alt="Páramo" class="miniatura">
-                <img src="imagenes/tatama3.jpg" alt="Paisaje" class="miniatura">
-                <img src="imagenes/tatama4.jpg" alt="Flora" class="miniatura">
+                <img src="{{ asset('imagenes/tatama2.jpg') }}" alt="Páramo" class="miniatura">
+                <img src="{{ asset('imagenes/tatama3.jpg') }}" alt="Paisaje" class="miniatura">
+                <img src="{{ asset('imagenes/tatama4.jpg') }}" alt="Flora" class="miniatura">
             </div>
         </div>
 
@@ -136,10 +136,10 @@
         </section>
 
         <div class="botones">
-            <a href="lugaresmontañosos2.html" class="boton-volver">Volver a Lugares</a>
+            <a href="{{ route('lugaresmontañosos2') }}" class="boton-volver">Volver a Lugares</a>
             <button class="boton-favorito" data-lugar="Parque Nacional Natural Tatamá">🤍</button>
         </div>
     </div>
-    <script src="js/favoritos.js"></script>
+    <script src="{{ asset('js/favoritos.js') }}"></script>
 </body>
 </html>

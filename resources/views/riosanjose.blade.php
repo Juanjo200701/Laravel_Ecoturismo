@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Río San José - Información Detallada</title>
-    <link rel="stylesheet" href="public/css/detallelugar.css">
+    <link rel="stylesheet" href="{{ asset('public/css/detallelugar.css') }}">
     <link rel="icon" href="imagenes/iconoecoturismo.jpg">
 </head>
 <body>
@@ -15,11 +15,11 @@
         </header>
 
         <div class="galeria">
-            <img src="imagenes/sanjose.webp" alt="Río San José" class="imagen-principal">
+            <img src="{{ asset('imagenes/sanjose.webp') }}" alt="Río San José" class="imagen-principal">
             <div class="miniaturas">
-                <img src="imagenes/sanjose2.png" alt="Vista río" class="miniatura">
-                <img src="imagenes/sanjose3.jpg" alt="Paisaje" class="miniatura">
-                <img src="imagenes/sanjose4.webp" alt="Entorno" class="miniatura">
+                <img src="{{ asset('imagenes/sanjose2.png') }}" alt="Vista río" class="miniatura">
+                <img src="{{ asset('imagenes/sanjose3.jpg') }}" alt="Paisaje" class="miniatura">
+                <img src="{{ asset('imagenes/sanjose4.webp') }}" alt="Entorno" class="miniatura">
             </div>
         </div>
 
@@ -183,10 +183,10 @@
         </section>
 
         <div class="botones">
-            <a href="paraisosacuaticos2.html" class="boton-volver">Volver a Lugares</a>
+            <a href="{{ route('paraisosacuaticos2') }}" class="boton-volver">Volver a Lugares</a>
             <button class="boton-favorito" data-lugar="Río San José">🤍</button>
         </div>
     </div>
-    <script src="js/favoritos.js"></script>
+    <script src="{{ asset('js/favoritos.js') }}"></script>
 </body>
 </html>

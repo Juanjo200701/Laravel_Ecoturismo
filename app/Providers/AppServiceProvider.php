@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -19,6 +20,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        // Evita el error "Specified key was too long" en MySQL antiguos
+        // Reduce la longitud por defecto de los string para índices a 191
+        Schema::defaultStringLength(191);
     }
 }

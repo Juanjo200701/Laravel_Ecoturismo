@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="public/css/terminosdeuso.css">
+    <link rel="stylesheet" href="{{ asset('public/css/terminosdeuso.css') }}">
     <title>Términos de Uso</title>
 </head>
 <body>
@@ -14,7 +14,7 @@
             </div>
             <nav class="navbar">
                 <a href="pagcentral2.html">Inicio</a>
-                <a href="contacto.html">Contacto</a>
+                <a href="{{ route('contacto') }}">Contacto</a>
             </nav>
         </div>
     </header>
@@ -84,7 +84,7 @@
         <section>
             <h3>6. Protección de Datos</h3>
             <p>
-                Recopilamos datos personales como nombres y correos electrónicos. Consulta nuestra <a href="politicas.html">Política de Privacidad</a> para más detalles sobre el manejo de datos.
+                Recopilamos datos personales como nombres y correos electrónicos. Consulta nuestra <a href="{{ route('politicas') }}">Política de Privacidad</a> para más detalles sobre el manejo de datos.
             </p>
         </section>
 

@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Estación Pereira - Información Detallada</title>
-    <link rel="stylesheet" href="public/css/detallelugar.css">
+    <link rel="stylesheet" href="{{ asset('css/detallelugar.css') }}">
     <link rel="icon" href="imagenes/iconoecoturismo.jpg">
 </head>
 <body>
@@ -15,11 +15,11 @@
         </header>
 
         <div class="galeria">
-            <img src="imagenes/estacion.jpg" alt="Estación Pereira" class="imagen-principal">
+            <img src="{{ asset('imagenes/estacion.jpg') }}" alt="Estación Pereira" class="imagen-principal">
             <div class="miniaturas">
-                <img src="imagenes/estacion2.webp" alt="Interior Estación" class="miniatura">
-                <img src="imagenes/estacion3.jpg" alt="Centro Comercial" class="miniatura">
-                <img src="imagenes/estacion4.jpg" alt="Arquitectura" class="miniatura">
+                <img src="{{ asset('imagenes/estacion2.webp') }}" alt="Interior Estación" class="miniatura">
+                <img src="{{ asset('imagenes/estacion3.jpg') }}" alt="Centro Comercial" class="miniatura">
+                <img src="{{ asset('imagenes/estacion4.jpg') }}" alt="Arquitectura" class="miniatura">
             </div>
         </div>
 
@@ -140,10 +140,10 @@
         </section>
 
         <div class="botones">
-            <a href="lugaresmontañosos2.html" class="boton-volver">Volver a Lugares</a>
+            <a href="{{ route('lugaresmontañosos2') }}" class="boton-volver">Volver a Lugares</a>
             <button class="boton-favorito" data-lugar="Estación Pereira">🤍</button>
         </div>
     </div>
-    <script src="js/favoritos.js"></script>
+    <script src="{{ asset('js/favoritos.js') }}"></script>
 </body>
 </html>

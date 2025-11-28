@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ asset('css/comentarios.css') }}">
     <title>Reseñas y Comentarios</title>
-    <link rel="stylesheet" href="public/css/comentarios.css">
-    <link rel="icon" href="imagenes/iconoecoturismo.jpg">
-    <script src="js/comentarios.js"></script>
+    <link rel="icon" href="{{ asset('imagenes/iconoecoturismo.jpg') }}">
+    <script src="{{ asset('js/comentarios.js') }}"></script>
 
 </head>
 <body>
@@ -23,7 +23,7 @@
         
         <div class="in-box">
             <div class="bx-img">
-                <img src="imagenes/usuario.jpg" >
+                <img src="{{ asset('imagenes/usuario.jpg') }}" >
             </div>
             <div class="bxx-text">
                 <h4>Karla Ospina</h4>
@@ -45,7 +45,7 @@
         
         <div class="in-box">
             <div class="bx-img">
-                <img src="imagenes/usuario.jpg" >
+                <img src="{{ asset('imagenes/usuario.jpg') }}" >
             </div>
             <div class="bxx-text">
                 <h4>Frank Navarro</h4>
@@ -66,7 +66,7 @@
     
     <div class="in-box">
         <div class="bx-img">
-            <img src="imagenes/usuario.jpg" >
+            <img src="{{ asset('imagenes/usuario.jpg') }}" >
         </div>
         <div class="bxx-text">
             <h4>Joan Montoya</h4>
@@ -82,7 +82,8 @@
     </div>
 </div>
 </section>
-<form action="mensajes">
+<form action="{{ route('mensajes') }}" method="POST">
+    @csrf
 <section class="comentaarios">
     <div class="input-container textarea focus">
         <textarea name="message" class="input" placeholder="Déjanos tu comentario: "></textarea>
@@ -90,7 +91,7 @@
     <input type="submit" value="Enviar" class="btn">
 </section>
 </form>
-<a href="pagcentral2.html" class="boton-volver">Volver</a>
+<a href="{{ route('pagcentral') }}" class="boton-volver">Volver</a>
 </div>
 </body>
 </html>

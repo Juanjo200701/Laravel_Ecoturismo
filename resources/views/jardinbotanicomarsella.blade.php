@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Jardín Botánico de Marsella - Información Detallada</title>
-    <link rel="stylesheet" href="public/css/detallelugar.css">
+    <link rel="stylesheet" href="{{ asset('css/detallelugar.css') }}">
     <link rel="icon" href="imagenes/iconoecoturismo.jpg">
 </head>
 <body>
@@ -15,11 +15,11 @@
         </header>
 
         <div class="galeria">
-            <img src="imagenes/jardinM.jpg" alt="Jardín Botánico de Marsella" class="imagen-principal">
+            <img src="{{ asset('imagenes/jardinM.jpg') }}" alt="Jardín Botánico de Marsella" class="imagen-principal">
             <div class="miniaturas">
-                <img src="imagenes/jardinmarsella2.jpg" alt="Flora" class="miniatura">
-                <img src="imagenes/jardinmarsella3.jpg" alt="Senderos" class="miniatura">
-                <img src="imagenes/jardinmarsella4.jpg" alt="Instalaciones" class="miniatura">
+                <img src="{{ asset('imagenes/jardinmarsella2.jpg') }}" alt="Flora" class="miniatura">
+                <img src="{{ asset('imagenes/jardinmarsella3.jpg') }}" alt="Senderos" class="miniatura">
+                <img src="{{ asset('imagenes/jardinmarsella4.jpg') }}" alt="Instalaciones" class="miniatura">
             </div>
         </div>
 
@@ -170,10 +170,10 @@
         </section>
 
         <div class="botones">
-            <a href="lugaresmontañosos2.html" class="boton-volver">Volver a Lugares</a>
+            <a href="{{ route('lugaresmontañosos2') }}" class="boton-volver">Volver a Lugares</a>
             <button class="boton-favorito" data-lugar="Jardín Botánico de Marsella">🤍</button>
         </div>
     </div>
-    <script src="js/favoritos.js"></script>
+    <script src="{{ asset('js/favoritos.js') }}"></script>
 </body>
 </html>

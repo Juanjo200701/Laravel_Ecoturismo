@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Laguna del Otún - Información Detallada</title>
-    <link rel="stylesheet" href="public/css/detallelugar.css">
+    <link rel="stylesheet" href="{{ asset('css/detallelugar.css') }}">
     <link rel="icon" href="../imagenes/iconoecoturismo.jpg">
 </head>
 <body>
@@ -15,11 +15,11 @@
         </header>
 
         <div class="galeria">
-            <img src="imagenes/laguna.jpg" alt="Laguna del Otún" class="imagen-principal">
+            <img src="{{ asset('imagenes/laguna.jpg') }}" alt="Laguna del Otún" class="imagen-principal">
             <div class="miniaturas">
-                <img src="imagenes/laguna-2.png" alt="Vista panorámica" class="miniatura">
-                <img src="imagenes/laguna-3.jpg" alt="Flora y fauna" class="miniatura">
-                <img src="imagenes/laguna-4.jpg" alt="Senderos" class="miniatura">
+                <img src="{{ asset('imagenes/laguna-2.png') }}" alt="Vista panorámica" class="miniatura">
+                <img src="{{ asset('imagenes/laguna-3.jpg') }}" alt="Flora y fauna" class="miniatura">
+                <img src="{{ asset('imagenes/laguna-4.jpg') }}" alt="Senderos" class="miniatura">
             </div>
         </div>
 
@@ -190,10 +190,10 @@
         </section>
 
         <div class="botones">
-            <a href="paraisosacuaticos2.html" class="boton-volver">Volver a Lugares</a>
+            <a href="{{ route('paraisosacuaticos2') }}" class="boton-volver">Volver a Lugares</a>
             <button class="boton-favorito" data-lugar="Laguna del Otún">🤍</button>
         </div>
     </div>
-    <script src="js/favoritos.js"></script>
+    <script src="{{ asset('js/favoritos.js') }}"></script>
 </body>
 </html>

@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Balneario Los Farallones - Información Detallada</title>
-    <link rel="stylesheet" href="public/css/detallelugar.css">
+    <link rel="stylesheet" href="{{ asset('css/detallelugar.css') }}">
     <link rel="icon" href="imagenes/iconoecoturismo.jpg">
 </head>
 <body>
@@ -15,11 +15,11 @@
         </header>
 
         <div class="galeria">
-            <img src="imagenes/farallones.jpeg" alt="Balneario Los Farallones" class="imagen-principal">
+            <img src="{{ asset('imagenes/farallones.jpeg') }}" alt="Balneario Los Farallones" class="imagen-principal">
             <div class="miniaturas">
-                <img src="imagenes/farallones-2.jpeg" alt="Piscinas" class="miniatura">
-                <img src="imagenes/farallones-3.jpg" alt="Instalaciones" class="miniatura">
-                <img src="imagenes/farallones-4.jpg" alt="Zonas verdes" class="miniatura">
+                <img src="{{ asset('imagenes/farallones-2.jpeg') }}" alt="Piscinas" class="miniatura">
+                <img src="{{ asset('imagenes/farallones-3.jpg') }}" alt="Instalaciones" class="miniatura">
+                <img src="{{ asset('imagenes/farallones-4.jpg') }}" alt="Zonas verdes" class="miniatura">
             </div>
         </div>
 
@@ -182,10 +182,10 @@
         </section>
 
         <div class="botones">
-            <a href="paraisosacuaticos2.html" class="boton-volver">Volver a Lugares</a>
+            <a href="{{ route('paraisosacuaticos2') }}" class="boton-volver">Volver a Lugares</a>
             <button class="boton-favorito" data-lugar="Balneario Los Farallones">🤍</button>
         </div>
     </div>
-    <script src="js/favoritos.js"></script>
+    <script src="{{ asset('js/favoritos.js') }}"></script>
 </body>
 </html>

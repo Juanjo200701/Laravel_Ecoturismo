@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cerro Canceles - Información Detallada</title>
-    <link rel="stylesheet" href="public/css/detallelugar.css">
+    <link rel="stylesheet" href="{{ asset('css/detallelugar.css') }}">
     <link rel="icon" href="imagenes/iconoecoturismo.jpg">
 </head>
 <body>
@@ -15,11 +15,11 @@
         </header>
 
         <div class="galeria">
-            <img src="imagenes/canceles7.jpg" alt="Cerro Canceles" class="imagen-principal">
+            <img src="{{ asset('imagenes/canceles7.jpg') }}" alt="Cerro Canceles" class="imagen-principal">
             <div class="miniaturas">
-                <img src="imagenes/canceles.jpg" alt="Vista panorámica" class="miniatura">
-                <img src="imagenes/canceles2.jpg" alt="Senderos" class="miniatura">
-                <img src="imagenes/canceles4.webp" alt="Paisaje" class="miniatura">
+                <img src="{{ asset('imagenes/canceles.jpg') }}" alt="Vista panorámica" class="miniatura">
+                <img src="{{ asset('imagenes/canceles2.jpg') }}" alt="Senderos" class="miniatura">
+                <img src="{{ asset('imagenes/canceles4.webp') }}" alt="Paisaje" class="miniatura">
             </div>
         </div>
 
@@ -129,10 +129,10 @@
         </section>
 
         <div class="botones">
-            <a href="territoriosdelcafe2.html" class="boton-volver">Volver a Lugares</a>
+            <a href="{{ route('territoriosdelcafe2') }}" class="boton-volver">Volver a Lugares</a>
             <button class="boton-favorito" data-lugar="Cerro Canceles">🤍</button>
         </div>
     </div>
-    <script src="js/favoritos.js"></script>
+    <script src="{{ asset('js/favoritos.js') }}"></script>
 </body>
 </html>
