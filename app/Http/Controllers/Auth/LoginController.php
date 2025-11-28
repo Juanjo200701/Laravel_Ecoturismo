@@ -22,18 +22,18 @@ class LoginController extends Controller
     public function login(Request $request)
     {
         $request->validate([
-            'username' => ['required'],
+            'name' => ['required'],
             'password' => ['required'],
         ]);
 
-        $login = $request->input('username');
+        $login = $request->input('name');
         $password = $request->input('password');
 
         // Permitir login por email o por username
         if (filter_var($login, FILTER_VALIDATE_EMAIL)) {
             $attempt = Auth::attempt(['email' => $login, 'password' => $password]);
         } else {
-            $attempt = Auth::attempt(['username' => $login, 'password' => $password]);
+            $attempt = Auth::attempt(['name' => $login, 'password' => $password]);
         }
 
         if ($attempt) {
@@ -42,8 +42,8 @@ class LoginController extends Controller
         }
 
         return back()->withErrors([
-            'username' => 'Las credenciales no coinciden.',
-        ])->onlyInput('username');
+            'name' => 'Las credenciales no coinciden.',
+        ])->onlyInput('name');
     }
 
     /**

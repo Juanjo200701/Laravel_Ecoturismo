@@ -12,9 +12,9 @@ class Usuarios extends Authenticatable
     protected $table = 'usuarios';
 
     public $timestamps = false;
-    
+
     protected $fillable = [
-        'username',
+        'name',
         'email',
         'password',
         'fecha_registro',
