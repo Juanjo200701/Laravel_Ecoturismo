@@ -10,7 +10,7 @@ class PlaceAdminController extends Controller
 {
     public function index()
     {
-        $places = Place::orderBy('created_at', 'desc')->get();
+        $places = Place::orderBy('id', 'desc')->get();
         return view('admin.places', compact('places'));
     }
 

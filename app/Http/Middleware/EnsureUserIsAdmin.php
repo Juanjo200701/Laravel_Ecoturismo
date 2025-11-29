@@ -4,13 +4,15 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpFoundation\Response;
 
 class EnsureUserIsAdmin
 {
     public function handle(Request $request, Closure $next): Response
     {
-        $user = $request->user();
+        // Obtener usuario autenticado (funciona tanto para web como API)
+        $user = Auth::user() ?? $request->user();
 
         if (!$user || !$user->is_admin) {
             if ($request->expectsJson()) {
@@ -19,7 +21,7 @@ class EnsureUserIsAdmin
                 ], 403);
             }
 
-            abort(403, 'Acceso denegado.');
+            abort(403, 'Acceso denegado. Se requieren permisos de administrador.');
         }
 
         return $next($request);

@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Panel de Lugares - Administración</title>
-    <link rel="stylesheet" href="{{ asset('css/pagcentral2.css') }}">
     <style>
         body { background:#f5f7fb; font-family: 'Montserrat', sans-serif; padding:30px; }
         .container { max-width:1100px; margin:0 auto; background:#fff; border-radius:16px; padding:30px; box-shadow:0 25px 50px rgba(28, 28, 26, 0.12); }
@@ -35,13 +34,30 @@
         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
             <div>
                 <h1>Gestión de Lugares</h1>
-                <p class="subtitle">Hola {{ auth()->user()->name }}, administra los lugares disponibles en la plataforma.</p>
+                <p class="subtitle">Hola {{ auth()->check() ? auth()->user()->name : 'Usuario' }}, administra los lugares disponibles en la plataforma.</p>
             </div>
             <a href="{{ route('pagcentral') }}" style="color:#24a148; font-weight:600;">← Volver</a>
         </div>
 
         @if(session('status'))
             <div class="status">{{ session('status') }}</div>
+        @endif
+
+        @if(isset($error))
+            <div style="background:#f8d7da; color:#721c24; border-radius:8px; padding:12px 16px; margin-bottom:20px;">
+                <strong>Error:</strong> {{ $error }}
+            </div>
+        @endif
+
+        @if($errors->any())
+            <div style="background:#f8d7da; color:#721c24; border-radius:8px; padding:12px 16px; margin-bottom:20px;">
+                <strong>Errores:</strong>
+                <ul style="margin:5px 0 0 20px;">
+                    @foreach($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
         @endif
 
         <div class="grid">
@@ -103,7 +119,7 @@
                                 <label>Imagen</label>
                                 <input type="text" name="image" value="{{ $place->image }}">
 
-                                <small>Última actualización: {{ $place->updated_at?->format('d/m/Y H:i') ?? 'N/A' }}</small>
+                                <small>Última actualización: {{ $place->updated_at ? $place->updated_at->format('d/m/Y H:i') : 'N/A' }}</small>
                             </form>
                         </td>
                         <td class="actions">
