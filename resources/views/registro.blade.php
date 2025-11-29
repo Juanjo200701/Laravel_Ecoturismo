@@ -17,9 +17,9 @@
             <form id="formulario" action="{{ route('registro.store') }}" method="POST">
                 @csrf
                 <h3>Regístrate...</h3>
-                <label for="username">Nombre de usuario:</label>
-                <input type="text" id="username" name="username" value="{{ old('username') }}" required>
-                @error('username')<div class="error">{{ $message }}</div>@enderror
+                <label for="name">Nombre de usuario:</label>
+                <input type="text" id="name" name="name" value="{{ old('name') }}" required>
+                @error('name')<div class="error">{{ $message }}</div>@enderror
 
                 <label for="email">Correo electrónico:</label>
                 <input type="email" id="email" name="email" value="{{ old('email') }}" required>
@@ -44,6 +44,6 @@
             <p>© 2025 Risaralda EcoTurismo</p>
         </footer>
     </div>
-    <script type="text/javascript" src="{{ asset('js/registro.js') }}"></script>
+    {{-- <script type="text/javascript" src="{{ asset('js/registro.js') }}"></script> --}}
 </body>
 </html>

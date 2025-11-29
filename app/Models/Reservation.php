@@ -18,4 +18,20 @@ class Reservation extends Model
         'personas',
         'estado',
     ];
+
+    /**
+     * Relación: Una reserva pertenece a un usuario
+     */
+    public function usuario()
+    {
+        return $this->belongsTo(Usuarios::class, 'user_id');
+    }
+
+    /**
+     * Relación: Una reserva pertenece a un lugar
+     */
+    public function place()
+    {
+        return $this->belongsTo(Place::class, 'place_id');
+    }
 }

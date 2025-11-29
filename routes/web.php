@@ -7,7 +7,7 @@ use App\Http\Controllers\Auth\RegisterController;
 
 Route::get('/', function () {
     return view('pagcentral');
-});
+})->name('pagcentral');
 
 // Alias used as post-login landing (keeps compatibility with original app)
 Route::get('/pagcentral2', function () {

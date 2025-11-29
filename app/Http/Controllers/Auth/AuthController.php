@@ -36,7 +36,7 @@ class AuthController extends Controller
             'password' => 'required|string',
         ]);
 
-        $user = Usuarios::where('name', $request->username)->first();
+        $user = Usuarios::where('name', $request->name)->first();
 
         if (!$user || !Hash::check($request->password, $user->password)) {
             throw ValidationException::withMessages(['name' => ['Credenciales inválidas.']]);

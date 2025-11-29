@@ -17,4 +17,12 @@ class Place extends Model
         'location',
         'image',
     ];
+
+    /**
+     * Relación: Un lugar tiene muchas reservas
+     */
+    public function reservations()
+    {
+        return $this->hasMany(Reservation::class, 'place_id');
+    }
 }

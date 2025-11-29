@@ -11,11 +11,12 @@ Route::view('/cascadalosfrailes', 'cascadalosfrailes')->name('cascadalosfrailes'
 Route::view('/cerrobatero', 'cerrobatero')->name('cerrobatero');
 Route::view('/cerrocanceles', 'cerrocanceles')->name('cerrocanceles');
 Route::view('/chorrosdonlolo', 'chorrosdonlolo')->name('chorrosdonlolo');
-Route::view('/comentarios', 'comentarios')->name('comentarios');
-Route::view('/comentarios2', 'comentarios2')->name('comentarios2');
+// Rutas duplicadas comentadas - ya definidas en web.php
+// Route::view('/comentarios', 'comentarios')->name('comentarios');
+// Route::view('/comentarios2', 'comentarios2')->name('comentarios2');
 Route::view('/configuracion', 'configuracion')->name('configuracion');
 Route::view('/consota', 'consota')->name('consota');
-Route::view('/contacto', 'contacto')->name('contacto');
+// Route::view('/contacto', 'contacto')->name('contacto');
 Route::view('/contacto2', 'contacto2')->name('contacto2');
 Route::view('/cookies', 'cookies')->name('cookies');
 Route::view('/cookies2', 'cookies2')->name('cookies2');
@@ -30,11 +31,11 @@ Route::view('/kaukitabosquereserva', 'kaukitabosquereserva')->name('kaukitabosqu
 Route::view('/lagolapradera', 'lagolapradera')->name('lagolapradera');
 Route::view('/lagunadelotun', 'lagunadelotun')->name('lagunadelotun');
 // Logout handled by LoginController@logout
-Route::view('/lugares', 'lugares')->name('lugares');
+// Route::view('/lugares', 'lugares')->name('lugares');
 Route::view('/lugaresmontañosos', 'lugaresmontañosos')->name('lugaresmontañosos');
 Route::view('/lugaresmontañosos2', 'lugaresmontañosos2')->name('lugaresmontañosos2');
 Route::view('/miradoraltagracia', 'miradoraltagracia')->name('miradoraltagracia');
-Route::view('/pagcentral', 'pagcentral')->name('pagcentral');
+// Route::view('/pagcentral', 'pagcentral')->name('pagcentral');
 Route::view('/paisajeculturalcafetero', 'paisajeculturalcafetero')->name('paisajeculturalcafetero');
 Route::view('/paraisosacuaticos', 'paraisosacuaticos')->name('paraisosacuaticos');
 Route::view('/paraisosacuaticos2', 'paraisosacuaticos2')->name('paraisosacuaticos2');
