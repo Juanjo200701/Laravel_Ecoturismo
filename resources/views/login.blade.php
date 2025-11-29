@@ -19,18 +19,33 @@
             <form id="formulario" action="{{ url('/login') }}" method="POST">
                 @csrf
 
-                <label for="username">Nombre de usuario:</label>
-                <input type="text" id="username" name="username" value="{{ old('username') }}" required>
-                @if($errors->has('username'))
-                    <div style="color:red;">{{ $errors->first('username') }}</div>
-                @endif
+                <label for="name">Nombre de usuario o Email:</label>
+                <input type="text" id="name" name="name" value="{{ old('name') }}" required autofocus>
+                @error('name')
+                    <div style="color:red; margin-top: 5px;">{{ $message }}</div>
+                @enderror
+                @error('credentials')
+                    <div style="color:red; margin-top: 5px;">{{ $message }}</div>
+                @enderror
 
                 <label for="password">Contraseña:</label>
                 <input type="password" id="password" name="password" required>
                 <button type="button" id="mostrarContraseña"></button>
 
                 @if(session('status'))
-                    <div style="color:green;">{{ session('status') }}</div>
+                    <div style="color:green; margin-top: 10px; padding: 10px; background-color: #d4edda; border-radius: 5px;">
+                        {{ session('status') }}
+                    </div>
+                @endif
+                
+                @if($errors->any())
+                    <div style="color:red; margin-top: 10px; padding: 10px; background-color: #f8d7da; border-radius: 5px;">
+                        <ul style="margin: 0; padding-left: 20px;">
+                            @foreach($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
                 @endif
 
                 <p><strong>¿Todavía no tienes cuenta?</strong><br><a href="{{ url('/registro') }}">Regístrate</a></p>

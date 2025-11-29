@@ -86,7 +86,11 @@
         <a href="{{ route('pagcentral') }}"><button class="volver">Volver</button></a>
 </div>
 <div class="final-message">
-    <p>Si quieres ver más lugares → <a href="{{ route('login') }}">Inicia Sesión </a></p>
+    @auth
+        <p>Gracias por iniciar sesión, {{ auth()->user()->name }}. Estamos preparando más destinos exclusivos para ti.</p>
+    @else
+        <p>Si quieres ver más lugares → <a href="{{ route('login') }}">Inicia Sesión </a></p>
+    @endauth
 </div>
 </div>
 <footer>© 2025 Risaralda EcoTurismo</footer>

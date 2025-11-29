@@ -12,22 +12,17 @@
     <title>Risarlda Ecoturismo</title>
 </head>
 <body id="body">
-    <!-- <div id="cookies" class="cookies-container">
-        <div class="cookies-contenido">
-            <p>Este sitio web utiliza cookies para mejorar la experiencia del usuario. Al continuar navegando, aceptas el uso de cookies.</p>
-            <button id="aceptar">Aceptar</button>
-            <button id="rechazar">Rechazar</button>
+    @guest
+        <div id="popup" class="popup hidden">
+            <div class="popup-content">
+                <h2>¿Cómo deseas continuar?</h2>
+                <p>Por favor, selecciona una opción para continuar navegando:</p>
+                <button id="registro"> <a href="{{ route('registro') }}">Registrarse</a></button>
+                <button id="logiin"> <a href="{{ route('login') }}">Iniciar Sesión</a></button>
+                <button id="guest">Continuar como Invitado</button>
+            </div>
         </div>
-    </div>  -->
-    <div id="popup" class="popup hidden">
-        <div class="popup-content">
-            <h2>¿Cómo deseas continuar?</h2>
-            <p>Por favor, selecciona una opción para continuar navegando:</p>
-            <button id="registro"> <a href="{{ route('registro') }}">Registrarse</a></button>
-            <button id="logiin"> <a href="{{ route('login') }}">Iniciar Sesión</a></button>
-            <button id="guest">Continuar como Invitado</button>
-        </div>
-    </div>
+    @endguest
     <header>
         <div class="header-container">
             <div class="logo-principal">
@@ -38,14 +33,15 @@
                     <a class="catalogo" href="{{ route('comentarios2') }}" id="catalogo-link">Reseñas</a>
                     <a id="contacto" class="contacto" href="{{ route('contacto') }}">Contacto</a>
                     <a href="{{ route('lugares') }}" id="lugares-link">Lugares</a>
-                    <a id="login" href="#pregunta">Login</a>
-                    <div id="pregunta" class="pregunta eo">
-                        <div id="pregunta-contenido">
-                            <h2>¿Ya ingresaste a tu perfil?</h2>
-                            <button id="si">Si</button>
-                            <button id="no">No</button>
-                        </div>
-                    </div>
+                    @auth
+                        <span style="color:#fff;font-weight:bold;margin-right:10px;">Hola, {{ auth()->user()->name }}</span>
+                        <form method="POST" action="{{ route('logout') }}" style="display:inline;">
+                            @csrf
+                            <button type="submit" id="logout-button" style="background:#24a148;color:#fff;border:none;padding:8px 12px;border-radius:6px;cursor:pointer;">Cerrar sesión</button>
+                        </form>
+                    @else
+                        <a id="login" href="{{ route('login') }}">Login</a>
+                    @endauth
                     <!-- <div class="menu-desplegable" id="menu-desplegable">
                         <a href="{{ route('paraisosacuaticos') }}">🤽 Paraísos Acuáticos</a>
                         <a href="{{ route('lugaresmontañosos') }}">⛰️ Parques y Más...</a>

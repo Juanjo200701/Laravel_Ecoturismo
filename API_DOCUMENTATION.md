@@ -39,24 +39,42 @@ POST /api/register
     "id": 1,
     "name": "usuario123",
     "email": "usuario@example.com",
-    "fecha_registro": "2025-01-15 10:30:00"
+    "fecha_registro": "2025-01-15 10:30:00",
+    "is_admin": false
   },
-  "token": "1|xxxxxxxxxxxxx"
+  "token": "1|xxxxxxxxxxxxx",
+  "token_type": "Bearer",
+  "expires_in": 2592000
 }
 ```
+
+**Validaciones:**
+- `name`: Requerido, mínimo 3 caracteres, máximo 255, único, solo letras, números y guiones bajos
+- `email`: Opcional, debe ser un email válido, único si se proporciona
+- `password`: Requerido, mínimo 6 caracteres, debe coincidir con `password_confirmation`
 
 ### 2. Iniciar Sesión
 ```http
 POST /api/login
 ```
 
-**Body:**
+**Body (con nombre de usuario):**
 ```json
 {
   "name": "usuario123",
   "password": "password123"
 }
 ```
+
+**Body (con email):**
+```json
+{
+  "email": "usuario@example.com",
+  "password": "password123"
+}
+```
+
+**Nota:** Puedes usar `name` o `email` para iniciar sesión. Solo necesitas proporcionar uno de los dos.
 
 **Response (200):**
 ```json
@@ -65,11 +83,19 @@ POST /api/login
   "user": {
     "id": 1,
     "name": "usuario123",
-    "email": "usuario@example.com"
+    "email": "usuario@example.com",
+    "fecha_registro": "2025-01-15 10:30:00",
+    "is_admin": false
   },
-  "token": "1|xxxxxxxxxxxxx"
+  "token": "1|xxxxxxxxxxxxx",
+  "token_type": "Bearer",
+  "expires_in": 2592000
 }
 ```
+
+**Errores posibles:**
+- `422`: Error de validación (faltan campos o formato incorrecto)
+- `422`: Credenciales incorrectas
 
 ### 3. Obtener Todos los Lugares (Público)
 ```http
@@ -123,15 +149,55 @@ Headers: Authorization: Bearer {token}
 **Response (200):**
 ```json
 {
-  "id": 1,
-  "name": "usuario123",
-  "email": "usuario@example.com",
-  "fecha_registro": "2025-01-15 10:30:00",
-  "reservations": []
+  "user": {
+    "id": 1,
+    "name": "usuario123",
+    "email": "usuario@example.com",
+    "fecha_registro": "2025-01-15 10:30:00",
+    "is_admin": true,
+    "reservations_count": 2
+  },
+  "reservations": [
+    {
+      "id": 1,
+      "place_id": 1,
+      "fecha": "2025-02-15",
+      "personas": 2,
+      "estado": "pendiente"
+    }
+  ]
 }
 ```
 
-### 6. Cerrar Sesión
+### 6. Verificar Token Válido
+```http
+GET /api/verify-token
+Headers: Authorization: Bearer {token}
+```
+
+**Response (200) - Token válido:**
+```json
+{
+  "valid": true,
+  "user": {
+    "id": 1,
+    "name": "usuario123",
+    "email": "usuario@example.com",
+    "is_admin": false
+  },
+  "message": "Token válido"
+}
+```
+
+**Response (401) - Token inválido:**
+```json
+{
+  "valid": false,
+  "message": "Token inválido o expirado"
+}
+```
+
+### 7. Cerrar Sesión (Token Actual)
 ```http
 POST /api/logout
 Headers: Authorization: Bearer {token}
@@ -144,11 +210,30 @@ Headers: Authorization: Bearer {token}
 }
 ```
 
-### 7. Crear un Lugar
+**Nota:** Solo revoca el token actual que se está usando.
+
+### 8. Cerrar Todas las Sesiones
+```http
+POST /api/logout-all
+Headers: Authorization: Bearer {token}
+```
+
+**Response (200):**
+```json
+{
+  "message": "Todas las sesiones han sido cerradas exitosamente"
+}
+```
+
+**Nota:** Revoca todos los tokens del usuario (útil para cerrar sesión en todos los dispositivos).
+
+### 9. Crear un Lugar *(solo administradores)*
 ```http
 POST /api/places
 Headers: Authorization: Bearer {token}
 ```
+
+**Requiere** que el usuario autenticado tenga `is_admin = true`.
 
 **Body:**
 ```json
@@ -173,11 +258,13 @@ Headers: Authorization: Bearer {token}
 }
 ```
 
-### 8. Actualizar un Lugar
+### 10. Actualizar un Lugar *(solo administradores)*
 ```http
 PUT /api/places/{id}
 Headers: Authorization: Bearer {token}
 ```
+
+**Requiere** que el usuario autenticado tenga `is_admin = true`.
 
 **Body:**
 ```json
@@ -187,11 +274,13 @@ Headers: Authorization: Bearer {token}
 }
 ```
 
-### 9. Eliminar un Lugar
+### 11. Eliminar un Lugar *(solo administradores)*
 ```http
 DELETE /api/places/{id}
 Headers: Authorization: Bearer {token}
 ```
+
+**Requiere** que el usuario autenticado tenga `is_admin = true`.
 
 **Response (200):**
 ```json
@@ -200,7 +289,7 @@ Headers: Authorization: Bearer {token}
 }
 ```
 
-### 10. Obtener Mis Reservas
+### 12. Obtener Mis Reservas
 ```http
 GET /api/reservations/my
 Headers: Authorization: Bearer {token}
@@ -233,7 +322,7 @@ Headers: Authorization: Bearer {token}
 ]
 ```
 
-### 11. Obtener Todas las Reservas (del usuario autenticado)
+### 13. Obtener Todas las Reservas (del usuario autenticado)
 ```http
 GET /api/reservations
 Headers: Authorization: Bearer {token}
@@ -241,7 +330,7 @@ Headers: Authorization: Bearer {token}
 
 **Nota:** Solo devuelve las reservas del usuario autenticado.
 
-### 12. Crear una Reserva
+### 14. Crear una Reserva
 ```http
 POST /api/reservations
 Headers: Authorization: Bearer {token}
@@ -279,7 +368,7 @@ Headers: Authorization: Bearer {token}
 }
 ```
 
-### 13. Obtener una Reserva Específica
+### 15. Obtener una Reserva Específica
 ```http
 GET /api/reservations/{id}
 Headers: Authorization: Bearer {token}
@@ -287,7 +376,7 @@ Headers: Authorization: Bearer {token}
 
 **Nota:** Solo puedes ver tus propias reservas. Si intentas ver una reserva de otro usuario, recibirás un error 403.
 
-### 14. Actualizar una Reserva
+### 16. Actualizar una Reserva
 ```http
 PUT /api/reservations/{id}
 Headers: Authorization: Bearer {token}
@@ -304,7 +393,7 @@ Headers: Authorization: Bearer {token}
 
 **Nota:** Solo puedes actualizar tus propias reservas.
 
-### 15. Eliminar una Reserva
+### 17. Eliminar una Reserva
 ```http
 DELETE /api/reservations/{id}
 Headers: Authorization: Bearer {token}
@@ -386,11 +475,29 @@ Cuando obtengas reservas, puedes incluir estas relaciones automáticamente usand
 
 ## Notas Importantes
 
-1. **Seguridad:** Todas las rutas protegidas requieren el token de autenticación en el header.
-2. **Reservas:** Los usuarios solo pueden ver, modificar y eliminar sus propias reservas.
-3. **Lugares:** La lectura de lugares es pública, pero crear/actualizar/eliminar requiere autenticación.
-4. **Validaciones:** Todas las fechas de reserva deben ser futuras (no se pueden hacer reservas en el pasado).
-5. **Tokens:** Los tokens no expiran automáticamente. El usuario debe hacer logout para invalidarlos.
+1. **Seguridad:** Todas las rutas protegidas requieren el token de autenticación en el header `Authorization: Bearer {token}`.
+2. **Tokens:** 
+   - Los tokens expiran después de 30 días
+   - Al hacer login, se revocan los tokens anteriores del mismo nombre
+   - Puedes usar `/api/logout` para cerrar la sesión actual
+   - Puedes usar `/api/logout-all` para cerrar todas las sesiones
+   - Usa `/api/verify-token` para verificar si un token es válido
+3. **Login:** Puedes iniciar sesión usando `name` o `email` (solo necesitas uno de los dos).
+4. **Reservas:** Los usuarios solo pueden ver, modificar y eliminar sus propias reservas.
+5. **Lugares:** La lectura de lugares es pública, pero crear/actualizar/eliminar requiere autenticación.
+6. **Validaciones:** 
+   - Todas las fechas de reserva deben ser futuras (no se pueden hacer reservas en el pasado)
+   - El nombre de usuario solo puede contener letras, números y guiones bajos
+   - La contraseña debe tener al menos 6 caracteres
+7. **Roles:** Las operaciones de creación/actualización/eliminación de lugares solo están disponibles para usuarios con `is_admin = true`.
+
+---
+
+## Roles y permisos
+
+- `is_admin = false` (por defecto): puede autenticarse, consultar lugares públicos y gestionar únicamente sus reservas.
+- `is_admin = true`: además de lo anterior, puede crear, actualizar y eliminar registros en `places` desde los endpoints protegidos.
+- Puedes promover un usuario a administrador editando la columna `is_admin` (por ejemplo desde la base de datos o con un seeder).
 
 ---
 

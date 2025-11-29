@@ -4,14 +4,21 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
+use App\Http\Controllers\Admin\PlaceAdminController;
 
 Route::get('/', function () {
     return view('pagcentral');
 })->name('pagcentral');
 
-// Alias used as post-login landing (keeps compatibility with original app)
-Route::get('/pagcentral2', function () {
-    return view('pagcentral');
+Route::middleware('auth')->group(function () {
+    Route::view('/lugares', 'lugares')->name('lugares');
+
+    Route::prefix('admin')->middleware('admin')->name('admin.')->group(function () {
+        Route::get('/places', [PlaceAdminController::class, 'index'])->name('places.index');
+        Route::post('/places', [PlaceAdminController::class, 'store'])->name('places.store');
+        Route::put('/places/{place}', [PlaceAdminController::class, 'update'])->name('places.update');
+        Route::delete('/places/{place}', [PlaceAdminController::class, 'destroy'])->name('places.destroy');
+    });
 });
 
 Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
@@ -27,7 +34,6 @@ Route::post('/registro', [RegisterController::class, 'store'])->name('registro.s
 // Rutas para vistas estáticas usadas en la UI
 Route::view('/comentarios', 'comentarios')->name('comentarios');
 Route::view('/comentarios2', 'comentarios2')->name('comentarios2');
-Route::view('/lugares', 'lugares')->name('lugares');
 Route::view('/contacto', 'contacto')->name('contacto');
 
 // Carga automática de rutas generadas para todas las vistas en resources/views

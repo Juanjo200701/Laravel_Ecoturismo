@@ -19,6 +19,7 @@ class DatabaseSeeder extends Seeder
             'password' => bcrypt('password'),
             'remember_token' => Str::random(10),
             'fecha_registro' => now(),
+            'is_admin' => true,
         ]);
     }
 }

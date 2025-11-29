@@ -20,11 +20,17 @@ class Usuarios extends Authenticatable
         'email',
         'password',
         'fecha_registro',
+        'is_admin',
     ];
 
     protected $hidden = [
         'password',
         'remember_token',
+    ];
+
+    protected $casts = [
+        'is_admin' => 'boolean',
+        'fecha_registro' => 'datetime',
     ];
 
     /**
