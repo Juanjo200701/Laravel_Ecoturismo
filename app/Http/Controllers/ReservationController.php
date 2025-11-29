@@ -11,9 +11,17 @@ class ReservationController extends Controller
 {
     public function index()
     {
-        $reservations = Reservation::where('user_id', Auth::id())
+        // El middleware 'auth' ya verifica la autenticación, pero agregamos verificación adicional
+        $user = Auth::user();
+        
+        if (!$user) {
+            return redirect()->route('login')->with('error', 'Debes iniciar sesión para ver tus reservas.');
+        }
+
+        $reservations = Reservation::where('user_id', $user->id)
             ->with(['place'])
             ->orderBy('fecha_visita', 'desc')
+            ->orderBy('created_at', 'desc')
             ->get();
 
         return view('reservations.index', compact('reservations'));

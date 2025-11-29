@@ -55,10 +55,13 @@ class LoginController extends Controller
         }
 
         // Autenticar usuario
-        Auth::login($user);
+        Auth::login($user, $request->has('remember')); // Agregar soporte para "remember me"
         $request->session()->regenerate();
 
-        return redirect()->intended(route('pagcentral'))->with('status', '¡Bienvenido de nuevo!');
+        // Guardar la URL previa si existe
+        $intended = $request->session()->pull('url.intended', route('pagcentral'));
+        
+        return redirect($intended)->with('status', '¡Bienvenido de nuevo!');
     }
 
     /**

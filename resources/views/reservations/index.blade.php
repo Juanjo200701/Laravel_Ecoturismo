@@ -23,13 +23,27 @@
     </style>
 </head>
 <body>
-    @include('components.header-user')
+    @auth
+        @if(auth()->user()->is_admin)
+            @include('components.header-admin')
+        @else
+            @include('components.header-user')
+        @endif
+    @else
+        @include('components.header-guest')
+    @endauth
     
     <div class="container">
         <h1 style="margin-bottom:30px; color:#1c1c1a;">Mis Reservas</h1>
 
         @if(session('status'))
             <div class="status">{{ session('status') }}</div>
+        @endif
+        
+        @if(session('error'))
+            <div style="background:#f8d7da; color:#721c24; border-radius:8px; padding:12px 16px; margin-bottom:20px;">
+                {{ session('error') }}
+            </div>
         @endif
 
         <div class="section">

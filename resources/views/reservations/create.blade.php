@@ -18,7 +18,15 @@
     </style>
 </head>
 <body>
-    @include('components.header-user')
+    @auth
+        @if(auth()->user()->is_admin)
+            @include('components.header-admin')
+        @else
+            @include('components.header-user')
+        @endif
+    @else
+        @include('components.header-guest')
+    @endauth
     
     <div class="container">
         <div class="card">

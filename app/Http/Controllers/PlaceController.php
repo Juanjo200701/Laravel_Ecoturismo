@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Place;
+use App\Models\Review;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class PlaceController extends Controller
 {
@@ -21,7 +23,21 @@ class PlaceController extends Controller
      */
     public function show(Place $place)
     {
-        return view('place.show', compact('place'));
+        $reviews = Review::where('place_id', $place->id)
+            ->with('usuario:id,name')
+            ->orderBy('fecha_comentario', 'desc')
+            ->get();
+        
+        $averageRating = $reviews->avg('rating') ?? 0;
+        $userReview = null;
+        
+        if (Auth::check()) {
+            $userReview = Review::where('user_id', Auth::id())
+                ->where('place_id', $place->id)
+                ->first();
+        }
+        
+        return view('place.show', compact('place', 'reviews', 'averageRating', 'userReview'));
     }
 }
 

@@ -12,6 +12,7 @@ use App\Http\Controllers\Admin\CategoryAdminController;
 use App\Http\Controllers\PlaceController;
 use App\Http\Controllers\ReservationController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\ReviewController;
 
 Route::get('/', function () {
     return view('pagcentral');
@@ -64,6 +65,10 @@ Route::middleware('auth')->group(function () {
             ->delete();
         return back()->with('status', 'Eliminado de favoritos');
     })->name('favorites.destroy');
+    
+    // Rutas de comentarios/reseñas
+    Route::post('/reviews', [ReviewController::class, 'store'])->name('reviews.store');
+    Route::delete('/reviews/{review}', [ReviewController::class, 'destroy'])->name('reviews.destroy');
 
     // Rutas de admin
     Route::prefix('admin')->middleware('admin')->name('admin.')->group(function () {
