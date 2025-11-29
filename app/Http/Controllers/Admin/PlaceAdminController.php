@@ -63,9 +63,21 @@ class PlaceAdminController extends Controller
             'image' => 'nullable|string|max:500',
         ]);
 
+        // Si hay una nueva imagen y es diferente a la anterior, eliminar la imagen antigua
+        if (isset($data['image']) && $data['image'] !== $place->image) {
+            // Eliminar imagen anterior si existe y está en storage
+            if ($place->image && strpos($place->image, 'storage/places/') !== false) {
+                $oldImagePath = str_replace(asset(''), '', $place->image);
+                $oldImagePath = str_replace('storage/', '', $oldImagePath);
+                if (Storage::disk('public')->exists('places/' . basename($oldImagePath))) {
+                    Storage::disk('public')->delete('places/' . basename($oldImagePath));
+                }
+            }
+        }
+
         $place->update($data);
 
-        return redirect()->route('admin.places.index')->with('status', 'Lugar actualizado.');
+        return redirect()->route('admin.places.index')->with('status', 'Lugar actualizado correctamente.');
     }
 
     public function destroy(Place $place)

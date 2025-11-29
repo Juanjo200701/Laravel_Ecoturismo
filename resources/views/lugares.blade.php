@@ -7,6 +7,15 @@
     <link rel="stylesheet" href="{{ asset('css/lugares.css') }}">
 </head>
 <body>
+    @auth
+        @if(auth()->user()->is_admin)
+            @include('components.header-admin')
+        @else
+            @include('components.header-user')
+        @endif
+    @else
+        @include('components.header-guest')
+    @endauth
 <div class="contenedorTodo">
     <h1>Lugares de Risaralda</h1>
 

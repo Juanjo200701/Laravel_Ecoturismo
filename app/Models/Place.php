@@ -25,4 +25,36 @@ class Place extends Model
     {
         return $this->hasMany(Reservation::class, 'place_id');
     }
+
+    /**
+     * Relación: Un lugar tiene muchas reseñas
+     */
+    public function reviews()
+    {
+        return $this->hasMany(Review::class, 'place_id');
+    }
+
+    /**
+     * Relación: Un lugar pertenece a muchas categorías
+     */
+    public function categories()
+    {
+        return $this->belongsToMany(Category::class, 'category_place');
+    }
+
+    /**
+     * Relación: Un lugar puede ser favorito de muchos usuarios
+     */
+    public function favorites()
+    {
+        return $this->hasMany(Favorite::class, 'place_id');
+    }
+
+    /**
+     * Calcular rating promedio
+     */
+    public function getAverageRatingAttribute()
+    {
+        return $this->reviews()->avg('rating') ?? 0;
+    }
 }

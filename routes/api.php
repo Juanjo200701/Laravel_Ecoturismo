@@ -5,6 +5,9 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\API\AuthController;
 use App\Http\Controllers\API\PlaceController;
 use App\Http\Controllers\API\ReservationController;
+use App\Http\Controllers\API\ReviewController;
+use App\Http\Controllers\API\FavoriteController;
+use App\Http\Controllers\API\PaymentController;
 
 // Rutas públicas
 Route::post('/login', [AuthController::class, 'login']);
@@ -30,4 +33,18 @@ Route::middleware('auth:sanctum')->group(function () {
     // Rutas de reservas
     Route::get('/reservations/my', [ReservationController::class, 'myReservations']);
     Route::apiResource('reservations', ReservationController::class);
+    
+    // Rutas de comentarios/reseñas
+    Route::get('/places/{placeId}/reviews', [ReviewController::class, 'index']);
+    Route::post('/reviews', [ReviewController::class, 'store']);
+    Route::delete('/reviews/{review}', [ReviewController::class, 'destroy']);
+    
+    // Rutas de favoritos
+    Route::get('/favorites', [FavoriteController::class, 'index']);
+    Route::post('/favorites', [FavoriteController::class, 'store']);
+    Route::delete('/favorites/{placeId}', [FavoriteController::class, 'destroy']);
+    
+    // Rutas de pagos (BOCETO)
+    Route::get('/payments', [PaymentController::class, 'index']);
+    Route::post('/payments', [PaymentController::class, 'store']);
 });

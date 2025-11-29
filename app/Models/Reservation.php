@@ -15,8 +15,22 @@ class Reservation extends Model
         'user_id',
         'place_id',
         'fecha',
+        'fecha_reserva',
+        'fecha_visita',
+        'hora_visita',
         'personas',
+        'telefono_contacto',
+        'comentarios',
+        'precio_total',
         'estado',
+    ];
+
+    protected $casts = [
+        'fecha' => 'date',
+        'fecha_reserva' => 'datetime',
+        'fecha_visita' => 'date',
+        'hora_visita' => 'datetime',
+        'precio_total' => 'decimal:2',
     ];
 
     /**
@@ -33,5 +47,13 @@ class Reservation extends Model
     public function place()
     {
         return $this->belongsTo(Place::class, 'place_id');
+    }
+
+    /**
+     * Relación: Una reserva puede tener un pago
+     */
+    public function payment()
+    {
+        return $this->hasOne(Payment::class, 'reservation_id');
     }
 }

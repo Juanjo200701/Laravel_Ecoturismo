@@ -39,7 +39,8 @@
     </style>
 </head>
 <body>
-    <div class="container">
+    @include('components.header-admin')
+    <div class="container" style="margin-top:30px;">
         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
             <div>
                 <h1>Gestión de Lugares</h1>
@@ -142,7 +143,8 @@
                                 <input type="hidden" name="image" id="image-url-{{ $place->id }}" value="{{ $place->image }}">
                                 <div id="image-preview-{{ $place->id }}" class="image-preview">
                                     @if($place->image)
-                                        <img src="{{ $place->image }}" alt="Imagen actual" onerror="this.style.display='none'">
+                                        <p style="font-size:0.85em; color:#666; margin:5px 0;">Imagen actual:</p>
+                                        <img src="{{ $place->image }}" alt="Imagen actual" style="max-width:200px; max-height:200px; border-radius:8px; border:2px solid #ececec;" onerror="this.style.display='none'">
                                     @endif
                                 </div>
 
@@ -184,9 +186,14 @@
             },
             success: function(file, response) {
                 if (response.success && response.url) {
-                    document.getElementById('image-url-create').value = response.url;
+                    const imageInput = document.getElementById('image-url-create');
                     const preview = document.getElementById('image-preview-create');
-                    preview.innerHTML = '<img src="' + response.url + '" alt="Vista previa">';
+                    
+                    imageInput.value = response.url;
+                    preview.innerHTML = '<img src="' + response.url + '" alt="Vista previa" style="max-width:200px; max-height:200px; border-radius:8px; border:2px solid #ececec; margin-top:10px;">';
+                    
+                    // Remover el archivo del dropzone para permitir subir otro
+                    this.removeFile(file);
                 }
             },
             error: function(file, message) {
@@ -208,9 +215,26 @@
             },
             success: function(file, response) {
                 if (response.success && response.url) {
-                    document.getElementById('image-url-{{ $place->id }}').value = response.url;
+                    const imageInput = document.getElementById('image-url-{{ $place->id }}');
                     const preview = document.getElementById('image-preview-{{ $place->id }}');
-                    preview.innerHTML = '<img src="' + response.url + '" alt="Vista previa">';
+                    
+                    // Actualizar el valor del input hidden
+                    imageInput.value = response.url;
+                    
+                    // Actualizar la vista previa
+                    preview.innerHTML = '<img src="' + response.url + '" alt="Vista previa" style="max-width:200px; max-height:200px; border-radius:8px; border:2px solid #ececec; margin-top:10px;">';
+                    
+                    // Remover el archivo del dropzone para permitir subir otro
+                    this.removeFile(file);
+                    
+                    // Mostrar mensaje de éxito
+                    const successMsg = document.createElement('div');
+                    successMsg.style.cssText = 'color: #155724; background: #d4edda; padding: 8px; border-radius: 4px; margin-top: 5px; font-size: 0.9em;';
+                    successMsg.textContent = '✓ Imagen actualizada. Haz clic en "Actualizar" para guardar.';
+                    preview.appendChild(successMsg);
+                    
+                    // Remover el mensaje después de 3 segundos
+                    setTimeout(() => successMsg.remove(), 3000);
                 }
             },
             error: function(file, message) {

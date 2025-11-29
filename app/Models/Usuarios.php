@@ -40,4 +40,28 @@ class Usuarios extends Authenticatable
     {
         return $this->hasMany(Reservation::class, 'user_id');
     }
+
+    /**
+     * Relación: Un usuario tiene muchas reseñas
+     */
+    public function reviews()
+    {
+        return $this->hasMany(Review::class, 'user_id');
+    }
+
+    /**
+     * Relación: Un usuario tiene muchos favoritos
+     */
+    public function favorites()
+    {
+        return $this->hasMany(Favorite::class, 'user_id');
+    }
+
+    /**
+     * Relación: Un usuario tiene muchos pagos
+     */
+    public function payments()
+    {
+        return $this->hasMany(Payment::class, 'user_id');
+    }
 }

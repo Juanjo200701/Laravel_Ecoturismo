@@ -23,28 +23,22 @@
             </div>
         </div>
     @endguest
-    <header>
+    @auth
+        @if(auth()->user()->is_admin)
+            @include('components.header-admin')
+        @else
+            @include('components.header-user')
+        @endif
+    @else
+        @include('components.header-guest')
+    @endauth
+    <header style="display:none;">
         <div class="header-container">
             <div class="logo-principal">
                 <img src="{{ asset('imagenes/iconoecoturismo.jpg') }}" width="70px" alt="">
                 <h2 class="risaralda">RisaraldaEcoTurismo</h2></div>
                 
-                <nav class="navbar">
-                    <a class="catalogo" href="{{ route('comentarios2') }}" id="catalogo-link">Reseñas</a>
-                    <a id="contacto" class="contacto" href="{{ route('contacto') }}">Contacto</a>
-                    <a href="{{ route('lugares') }}" id="lugares-link">Lugares</a>
-                    @auth
-                        <span style="color:#fff;font-weight:bold;margin-right:10px;">Hola, {{ auth()->user()->name }}</span>
-                        @if(auth()->user()->is_admin)
-                            <a href="{{ route('admin.places.index') }}" style="color:#fff;background:#004d40;padding:8px 12px;border-radius:6px;margin-right:8px;text-decoration:none;font-weight:600;">Panel Admin</a>
-                        @endif
-                        <form method="POST" action="{{ route('logout') }}" style="display:inline;">
-                            @csrf
-                            <button type="submit" id="logout-button" style="background:#24a148;color:#fff;border:none;padding:8px 12px;border-radius:6px;cursor:pointer;">Cerrar sesión</button>
-                        </form>
-                    @else
-                        <a id="login" href="{{ route('login') }}">Login</a>
-                    @endauth
+                <nav class="navbar" style="display:none;">
                     <!-- <div class="menu-desplegable" id="menu-desplegable">
                         <a href="{{ route('paraisosacuaticos') }}">🤽 Paraísos Acuáticos</a>
                         <a href="{{ route('lugaresmontañosos') }}">⛰️ Parques y Más...</a>
