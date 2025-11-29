@@ -3,7 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>Panel de Lugares - Administración</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.9.3/min/dropzone.min.css">
     <style>
         body { background:#f5f7fb; font-family: 'Montserrat', sans-serif; padding:30px; }
         .container { max-width:1100px; margin:0 auto; background:#fff; border-radius:16px; padding:30px; box-shadow:0 25px 50px rgba(28, 28, 26, 0.12); }
@@ -24,6 +26,13 @@
         .actions form { display:inline; }
         .secondary { background:#004d40; }
         .danger { background:#d7263d; }
+        .dropzone { border:2px dashed #24a148; border-radius:10px; padding:20px; text-align:center; background:#f9f9f9; min-height:150px; }
+        .dropzone.dz-drag-hover { border-color:#004d40; background:#e8f5e9; }
+        .dropzone .dz-message { margin:2em 0; color:#6c6c68; }
+        .dropzone .dz-preview { display:inline-block; margin:10px; }
+        .dropzone .dz-preview img { max-width:150px; max-height:150px; border-radius:8px; }
+        .image-preview { margin-top:10px; }
+        .image-preview img { max-width:200px; max-height:200px; border-radius:8px; border:2px solid #ececec; }
         @media (max-width:900px) {
             .grid { grid-template-columns:1fr; }
         }
@@ -74,8 +83,15 @@
                     <label>Ubicación</label>
                     <input type="text" name="location" value="{{ old('location') }}">
 
-                    <label>URL de imagen</label>
-                    <input type="text" name="image" value="{{ old('image') }}">
+                    <label>Imagen</label>
+                    <div id="dropzone-create" class="dropzone">
+                        <div class="dz-message">
+                            <p>Arrastra una imagen aquí o haz clic para seleccionar</p>
+                            <p class="dz-message-text">(Formatos: JPG, PNG, GIF - Máx: 5MB)</p>
+                        </div>
+                    </div>
+                    <input type="hidden" name="image" id="image-url-create" value="{{ old('image') }}">
+                    <div id="image-preview-create" class="image-preview"></div>
 
                     <button type="submit">Guardar lugar</button>
                 </form>
@@ -117,7 +133,18 @@
                                 <input type="text" name="location" value="{{ $place->location }}">
 
                                 <label>Imagen</label>
-                                <input type="text" name="image" value="{{ $place->image }}">
+                                <div id="dropzone-{{ $place->id }}" class="dropzone">
+                                    <div class="dz-message">
+                                        <p>Arrastra una imagen aquí o haz clic para seleccionar</p>
+                                        <p class="dz-message-text">(Formatos: JPG, PNG, GIF - Máx: 5MB)</p>
+                                    </div>
+                                </div>
+                                <input type="hidden" name="image" id="image-url-{{ $place->id }}" value="{{ $place->image }}">
+                                <div id="image-preview-{{ $place->id }}" class="image-preview">
+                                    @if($place->image)
+                                        <img src="{{ $place->image }}" alt="Imagen actual" onerror="this.style.display='none'">
+                                    @endif
+                                </div>
 
                                 <small>Última actualización: {{ $place->updated_at ? $place->updated_at->format('d/m/Y H:i') : 'N/A' }}</small>
                             </form>
@@ -139,6 +166,59 @@
             </tbody>
         </table>
     </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.9.3/min/dropzone.min.js"></script>
+    <script>
+        // Configuración global de Dropzone
+        Dropzone.autoDiscover = false;
+
+        // Dropzone para crear nuevo lugar
+        const dropzoneCreate = new Dropzone("#dropzone-create", {
+            url: "{{ route('admin.places.upload') }}",
+            paramName: "image",
+            maxFiles: 1,
+            acceptedFiles: "image/jpeg,image/png,image/gif,image/jpg",
+            maxFilesize: 5,
+            addRemoveLinks: true,
+            headers: {
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.content || '{{ csrf_token() }}'
+            },
+            success: function(file, response) {
+                if (response.success && response.url) {
+                    document.getElementById('image-url-create').value = response.url;
+                    const preview = document.getElementById('image-preview-create');
+                    preview.innerHTML = '<img src="' + response.url + '" alt="Vista previa">';
+                }
+            },
+            error: function(file, message) {
+                alert('Error al subir la imagen: ' + (message.message || message));
+            }
+        });
+
+        // Dropzones para editar lugares existentes
+        @foreach($places as $place)
+        const dropzone{{ $place->id }} = new Dropzone("#dropzone-{{ $place->id }}", {
+            url: "{{ route('admin.places.upload') }}",
+            paramName: "image",
+            maxFiles: 1,
+            acceptedFiles: "image/jpeg,image/png,image/gif,image/jpg",
+            maxFilesize: 5,
+            addRemoveLinks: true,
+            headers: {
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.content || '{{ csrf_token() }}'
+            },
+            success: function(file, response) {
+                if (response.success && response.url) {
+                    document.getElementById('image-url-{{ $place->id }}').value = response.url;
+                    const preview = document.getElementById('image-preview-{{ $place->id }}');
+                    preview.innerHTML = '<img src="' + response.url + '" alt="Vista previa">';
+                }
+            },
+            error: function(file, message) {
+                alert('Error al subir la imagen: ' + (message.message || message));
+            }
+        });
+        @endforeach
+    </script>
 </body>
 </html>
 

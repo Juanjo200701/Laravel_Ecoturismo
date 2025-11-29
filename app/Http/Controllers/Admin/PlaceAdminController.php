@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Place;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class PlaceAdminController extends Controller
 {
@@ -28,6 +29,31 @@ class PlaceAdminController extends Controller
         return redirect()->route('admin.places.index')->with('status', 'Lugar creado correctamente.');
     }
 
+    public function upload(Request $request)
+    {
+        $request->validate([
+            'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:5120', // 5MB máximo
+        ]);
+
+        if ($request->hasFile('image')) {
+            $image = $request->file('image');
+            $filename = time() . '_' . uniqid() . '.' . $image->getClientOriginalExtension();
+            $path = $image->storeAs('places', $filename, 'public');
+            $url = asset('storage/' . $path);
+
+            return response()->json([
+                'success' => true,
+                'url' => $url,
+                'message' => 'Imagen subida correctamente'
+            ]);
+        }
+
+        return response()->json([
+            'success' => false,
+            'message' => 'No se recibió ninguna imagen'
+        ], 400);
+    }
+
     public function update(Request $request, Place $place)
     {
         $data = $request->validate([
@@ -44,6 +70,13 @@ class PlaceAdminController extends Controller
 
     public function destroy(Place $place)
     {
+        // Eliminar imagen si existe y está en storage
+        if ($place->image && strpos($place->image, 'storage/places/') !== false) {
+            $imagePath = str_replace(asset(''), '', $place->image);
+            $imagePath = str_replace('storage/', '', $imagePath);
+            Storage::disk('public')->delete('places/' . basename($imagePath));
+        }
+
         $place->delete();
 
         return redirect()->route('admin.places.index')->with('status', 'Lugar eliminado.');

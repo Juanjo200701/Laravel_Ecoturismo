@@ -5,17 +5,21 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Admin\PlaceAdminController;
+use App\Http\Controllers\PlaceController;
 
 Route::get('/', function () {
     return view('pagcentral');
 })->name('pagcentral');
 
-Route::middleware('auth')->group(function () {
-    Route::view('/lugares', 'lugares')->name('lugares');
+// Rutas públicas de lugares
+Route::get('/lugares', [PlaceController::class, 'index'])->name('lugares');
+Route::get('/lugares/{place}', [PlaceController::class, 'show'])->name('place.show');
 
+Route::middleware('auth')->group(function () {
     Route::prefix('admin')->middleware('admin')->name('admin.')->group(function () {
         Route::get('/places', [PlaceAdminController::class, 'index'])->name('places.index');
         Route::post('/places', [PlaceAdminController::class, 'store'])->name('places.store');
+        Route::post('/places/upload', [PlaceAdminController::class, 'upload'])->name('places.upload');
         Route::put('/places/{place}', [PlaceAdminController::class, 'update'])->name('places.update');
         Route::delete('/places/{place}', [PlaceAdminController::class, 'destroy'])->name('places.destroy');
     });
