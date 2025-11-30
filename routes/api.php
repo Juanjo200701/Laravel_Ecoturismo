@@ -18,7 +18,8 @@ Route::get('/places', [PlaceController::class, 'index']);
 Route::get('/places/{place}', [PlaceController::class, 'show']);
 
 // Rutas protegidas con Sanctum
-Route::middleware('auth:sanctum')->group(function () {
+// Añadimos un prefijo de nombre `api.` para evitar colisiones con las rutas web
+Route::middleware('auth:sanctum')->name('api.')->group(function () {
     // Autenticación
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::post('/logout-all', [AuthController::class, 'logoutAll']);
