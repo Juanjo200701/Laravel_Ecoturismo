@@ -58,10 +58,8 @@ class LoginController extends Controller
         Auth::login($user, $request->has('remember')); // Agregar soporte para "remember me"
         $request->session()->regenerate();
 
-        // Guardar la URL previa si existe
-        $intended = $request->session()->pull('url.intended', route('pagcentral'));
-        
-        return redirect($intended)->with('status', '¡Bienvenido de nuevo!');
+        // Redirigir a la raíz y dejar que React Router maneje la navegación
+        return redirect('/')->with('status', '¡Bienvenido de nuevo!');
     }
 
     /**

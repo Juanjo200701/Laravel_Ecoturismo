@@ -13,17 +13,17 @@ use App\Http\Controllers\PlaceController;
 use App\Http\Controllers\ReservationController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ReviewController;
+use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\MessageController;
 
-Route::get('/', function () {
-    return view('pagcentral');
-})->name('pagcentral');
-
-// Rutas públicas de lugares
-Route::get('/lugares', [PlaceController::class, 'index'])->name('lugares');
-Route::get('/lugares/{place}', [PlaceController::class, 'show'])->name('place.show');
-
-// Rutas públicas de categorías
-Route::get('/categoria/{category}', [CategoryController::class, 'show'])->name('category.show');
+// ============================================
+// AUTENTICACIÓN (Estas rutas deben ir primero)
+// ============================================
+// Las rutas GET /login y /registro son manejadas por React Router
+// Solo manejamos los POST aquí (autenticación actual)
+Route::post('/login', [LoginController::class, 'login']);
+Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
+Route::post('/registro', [RegisterController::class, 'store'])->name('registro.store');
 
 Route::middleware('auth')->group(function () {
     // Rutas de usuarios
@@ -91,29 +91,30 @@ Route::middleware('auth')->group(function () {
     });
 });
 
-Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
-Route::post('/login', [LoginController::class, 'login']);
+// ============================================
+// RUTAS DE PERFIL
+// ============================================
+Route::middleware('auth')->group(function () {
+    Route::get('/configuracion', [ProfileController::class, 'show'])->name('configuracion');
+    Route::put('/perfil', [ProfileController::class, 'update'])->name('profile.update');
+    Route::put('/perfil/password', [ProfileController::class, 'changePassword'])->name('profile.password');
+});
 
-// Logout (POST) handled by LoginController
-Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
+// ============================================
+// ENVÍO DE MENSAJES
+// ============================================
+Route::post('/mensajes', [MessageController::class, 'store'])->name('mensajes');
 
-// Registro: show form y procesar registro
-Route::get('/registro', [RegisterController::class, 'create'])->name('registro');
-Route::post('/registro', [RegisterController::class, 'store'])->name('registro.store');
+// ============================================
+// RUTA PRINCIPAL - REACT APP
+// ============================================
+Route::get('/', function () {
+    return view('app');
+})->name('pagcentral');
 
-// Rutas para vistas estáticas usadas en la UI
-Route::view('/comentarios', 'comentarios')->name('comentarios');
-Route::view('/comentarios2', 'comentarios2')->name('comentarios2');
-Route::view('/contacto', 'contacto')->name('contacto');
-
-// Carga automática de rutas generadas para todas las vistas en resources/views
-if (file_exists(__DIR__ . '/views_generated.php')) {
-    require __DIR__ . '/views_generated.php';
-}
-
-// Manejo simple de envío de mensajes desde la vista de comentarios
-Route::post('/mensajes', function (Request $request) {
-    // Aquí podrías validar y guardar el mensaje en BD o enviarlo por correo.
-    // Por ahora simplemente redirigimos con un mensaje de sesión.
-    return redirect()->route('comentarios')->with('status', 'Mensaje enviado correctamente');
-})->name('mensajes');
+// ============================================
+// FALLBACK: Todas las demás rutas GET sirven la app React
+// ============================================
+Route::get('/{any}', function () {
+    return view('app');
+})->where('any', '.*');

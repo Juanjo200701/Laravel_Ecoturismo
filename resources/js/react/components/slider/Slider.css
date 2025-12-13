@@ -1,0 +1,60 @@
+
+/* SLIDER */
+.slider-container {
+  width: 95%;
+  height: 80vh; /* más pequeño */
+  position: relative;
+  overflow: hidden;
+  border-radius: 15px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}
+
+.slider {
+  display: flex;
+  width: 300%;
+  height: 100%;
+  animation: slide 25s infinite alternate ease-in-out;
+}
+
+.slide {
+  width: 100%;
+  height: 100%;
+}
+
+.slide img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 15px;
+}
+
+@keyframes slide {
+  0%, 33.33% { transform: translateX(0); }
+  38.33%, 71.66% { transform: translateX(-33.33%); }
+  76.66%, 100% { transform: translateX(-66.66%); }
+}
+
+.intro-text {
+    position: absolute;
+    top: 85%;
+    left: 42%;
+    text-align: left;
+    transform: translate(-50%, -50%);
+    /* text-align: center; */
+    color: #ffffff; /* Texto blanco */
+    z-index: 10; /* Asegura que el texto esté encima del slider */
+    /* background-color: rgba(0, 0, 0, 0.5); Fondo semitransparente */
+    padding: 20px;
+    border-radius: 10px;
+    width: 80%; /* Ajusta el ancho del texto */
+}
+
+
+.intro-text h1 {
+  font-size: 2.2rem;
+  margin: 0;
+}
+
+.intro-text p {
+  font-size: 1.1rem;
+}
