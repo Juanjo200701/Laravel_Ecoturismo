@@ -170,9 +170,9 @@ export default function LugaresMontanososPage() {
             </div>
           </div>
         )}
-
-        <Footer />
       </div>
+
+      <Footer />
     </>
   );
 }

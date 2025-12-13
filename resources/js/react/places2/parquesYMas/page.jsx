@@ -154,9 +154,9 @@ export default function ParquesYMasPage() {
             </div>
           </div>
         )}
-
-        <Footer />
       </div>
+
+      <Footer />
     </>
   );
 }

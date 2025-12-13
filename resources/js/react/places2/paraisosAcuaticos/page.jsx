@@ -170,9 +170,9 @@ export default function ParaisosAcuaticosPage() {
             </div>
           </div>
         )}
-
-        <Footer />
       </div>
+
+      <Footer />
     </>
   );
 }

@@ -1,5 +1,6 @@
 import React, { useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { useAuth } from "@/react/context/AuthContext";
 import "./page.css";
 import Header2 from "@/react/components/Header2/Header2";
 import Footer from "@/react/components/Footer/Footer";
@@ -7,15 +8,30 @@ import usuarioImg from "@/react/components/imagenes/usuario.jpg";
 
 const Comments2Page= () => {
   const navigate = useNavigate();
-  const user = window.Laravel?.user || null;
+  const { user, isAuthenticated, loading } = useAuth();
 
   useEffect(() => {
-    if (!user) {
+    if (!loading && !isAuthenticated) {
       navigate('/login', { replace: true });
     }
-  }, [user, navigate]);
+  }, [isAuthenticated, loading, navigate]);
 
-  if (!user) {
+  // Mostrar loading
+  if (loading) {
+    return (
+      <div style={{ 
+        display: 'flex', 
+        justifyContent: 'center', 
+        alignItems: 'center', 
+        height: '100vh' 
+      }}>
+        <p>Cargando...</p>
+      </div>
+    );
+  }
+
+  // Si no hay usuario, no renderizar
+  if (!isAuthenticated || !user) {
     return null;
   }
 

@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "@/react/context/AuthContext";
 import Header2 from "@/react/components/Header2/Header2";
 import Footer from "@/react/components/Footer/Footer";
 import axios from "axios";
@@ -7,31 +8,48 @@ import "./page.css";
 
 const PerfilPage = () => {
   const navigate = useNavigate();
-  const user = window.Laravel?.user || null;
+  const { user, isAuthenticated, loading } = useAuth();
   const [formData, setFormData] = useState({
     name: "",
     email: "",
     telefono: "",
   });
   const [message, setMessage] = useState("");
-  const [loading, setLoading] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   // Validar que el usuario esté autenticado
   useEffect(() => {
-    if (!user) {
+    if (!loading && !isAuthenticated) {
       navigate("/login", { replace: true });
       return;
     }
 
     // Cargar datos del usuario
-    setFormData({
-      name: user.name || "",
-      email: user.email || "",
-      telefono: user.telefono || "",
-    });
-  }, [user, navigate]);
+    if (user) {
+      setFormData({
+        name: user.name || "",
+        email: user.email || "",
+        telefono: user.telefono || "",
+      });
+    }
+  }, [user, isAuthenticated, loading, navigate]);
 
-  if (!user) {
+  // Mostrar loading
+  if (loading) {
+    return (
+      <div style={{ 
+        display: 'flex', 
+        justifyContent: 'center', 
+        alignItems: 'center', 
+        height: '100vh' 
+      }}>
+        <p>Cargando...</p>
+      </div>
+    );
+  }
+
+  // Si no hay usuario autenticado, no renderizar
+  if (!isAuthenticated || !user) {
     return null;
   }
 
@@ -45,7 +63,7 @@ const PerfilPage = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setLoading(true);
+    setIsSubmitting(true);
     setMessage("");
 
     try {
@@ -57,7 +75,7 @@ const PerfilPage = () => {
         error.response?.data?.message || "Error al actualizar el perfil"
       );
     } finally {
-      setLoading(false);
+      setIsSubmitting(false);
     }
   };
 
@@ -123,10 +141,10 @@ const PerfilPage = () => {
             <div className="form-buttons">
               <button
                 type="submit"
-                disabled={loading}
+                disabled={isSubmitting}
                 className="btn-guardar"
               >
-                {loading ? "Guardando..." : "Guardar Cambios"}
+                {isSubmitting ? "Guardando..." : "Guardar Cambios"}
               </button>
 
               <button
