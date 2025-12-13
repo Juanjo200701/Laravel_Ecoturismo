@@ -1,25 +1,27 @@
-# Documentación de la API - EcoTurismo Backend
+# Documentación de la API - Risaralda EcoTurismo
 
 ## Base URL
 ```
-http://tu-dominio.com/api
+http://localhost:8000/api
 ```
 
 ## Autenticación
-La API usa **Laravel Sanctum** para autenticación mediante tokens. Después de hacer login o registro, recibirás un token que debes incluir en el header de todas las peticiones protegidas:
 
+La API utiliza Laravel Sanctum para autenticación mediante tokens Bearer.
+
+### Headers requeridos para rutas protegidas:
 ```
 Authorization: Bearer {token}
+Accept: application/json
+Content-Type: application/json
 ```
 
 ---
 
-## Endpoints Públicos (Sin autenticación)
+## Endpoints Públicos
 
-### 1. Registrar Usuario
-```http
-POST /api/register
-```
+### 1. Registro de Usuario
+**POST** `/api/register`
 
 **Body:**
 ```json
@@ -31,7 +33,7 @@ POST /api/register
 }
 ```
 
-**Response (201):**
+**Respuesta exitosa (201):**
 ```json
 {
   "message": "Usuario registrado exitosamente",
@@ -39,34 +41,26 @@ POST /api/register
     "id": 1,
     "name": "usuario123",
     "email": "usuario@example.com",
-    "fecha_registro": "2025-01-15 10:30:00",
+    "fecha_registro": "2025-01-01T00:00:00.000000Z",
     "is_admin": false
   },
-  "token": "1|xxxxxxxxxxxxx",
+  "token": "1|xxxxxxxxxxxx",
   "token_type": "Bearer",
   "expires_in": 2592000
 }
 ```
 
-**Validaciones:**
-- `name`: Requerido, mínimo 3 caracteres, máximo 255, único, solo letras, números y guiones bajos
-- `email`: Opcional, debe ser un email válido, único si se proporciona
-- `password`: Requerido, mínimo 6 caracteres, debe coincidir con `password_confirmation`
+### 2. Login
+**POST** `/api/login`
 
-### 2. Iniciar Sesión
-```http
-POST /api/login
-```
-
-**Body (con nombre de usuario):**
+**Body:**
 ```json
 {
   "name": "usuario123",
   "password": "password123"
 }
 ```
-
-**Body (con email):**
+O con email:
 ```json
 {
   "email": "usuario@example.com",
@@ -74,473 +68,280 @@ POST /api/login
 }
 ```
 
-**Nota:** Puedes usar `name` o `email` para iniciar sesión. Solo necesitas proporcionar uno de los dos.
-
-**Response (200):**
+**Respuesta exitosa (200):**
 ```json
 {
   "message": "Inicio de sesión exitoso",
-  "user": {
-    "id": 1,
-    "name": "usuario123",
-    "email": "usuario@example.com",
-    "fecha_registro": "2025-01-15 10:30:00",
-    "is_admin": false
-  },
-  "token": "1|xxxxxxxxxxxxx",
+  "user": { ... },
+  "token": "1|xxxxxxxxxxxx",
   "token_type": "Bearer",
   "expires_in": 2592000
 }
 ```
 
-**Errores posibles:**
-- `422`: Error de validación (faltan campos o formato incorrecto)
-- `422`: Credenciales incorrectas
+### 3. Obtener Todos los Lugares
+**GET** `/api/places`
 
-### 3. Obtener Todos los Lugares (Público)
-```http
-GET /api/places
-```
+**Query Parameters:**
+- `category_id` (opcional): Filtrar por categoría
+- `search` (opcional): Buscar por nombre o descripción
 
-**Response (200):**
+**Respuesta:**
 ```json
 [
   {
     "id": 1,
-    "name": "Parque del Café",
-    "description": "Parque temático del café",
-    "location": "Montenegro, Quindío",
-    "image": "url_de_imagen.jpg",
-    "created_at": "2025-01-15T10:00:00.000000Z",
-    "updated_at": "2025-01-15T10:00:00.000000Z"
+    "name": "Parque Natural",
+    "description": "...",
+    "location": "...",
+    "image": "...",
+    "average_rating": 4.5,
+    "reviews_count": 10,
+    "categories": [...]
   }
 ]
 ```
 
-### 4. Obtener un Lugar Específico (Público)
-```http
-GET /api/places/{id}
-```
+### 4. Obtener un Lugar Específico
+**GET** `/api/places/{id}`
 
-**Response (200):**
+**Respuesta:**
 ```json
 {
-  "id": 1,
-  "name": "Parque del Café",
-  "description": "Parque temático del café",
-  "location": "Montenegro, Quindío",
-  "image": "url_de_imagen.jpg",
-  "reservations": [],
-  "created_at": "2025-01-15T10:00:00.000000Z",
-  "updated_at": "2025-01-15T10:00:00.000000Z"
+  "place": { ... },
+  "average_rating": 4.5,
+  "reviews_count": 10
+}
+```
+
+### 5. Obtener Todas las Categorías
+**GET** `/api/categories`
+
+### 6. Obtener una Categoría
+**GET** `/api/categories/{id}`
+
+### 7. Obtener Reseñas de un Lugar
+**GET** `/api/places/{placeId}/reviews`
+
+### 8. Enviar Mensaje de Contacto
+**POST** `/api/messages`
+
+**Body:**
+```json
+{
+  "name": "Juan Pérez",
+  "email": "juan@example.com",
+  "subject": "Consulta",
+  "message": "Mensaje de contacto"
 }
 ```
 
 ---
 
-## Endpoints Protegidos (Requieren autenticación)
+## Endpoints Protegidos (requieren token)
 
-### 5. Obtener Usuario Autenticado
-```http
-GET /api/user
-Headers: Authorization: Bearer {token}
-```
+### Autenticación
 
-**Response (200):**
-```json
-{
-  "user": {
-    "id": 1,
-    "name": "usuario123",
-    "email": "usuario@example.com",
-    "fecha_registro": "2025-01-15 10:30:00",
-    "is_admin": true,
-    "reservations_count": 2
-  },
-  "reservations": [
-    {
-      "id": 1,
-      "place_id": 1,
-      "fecha": "2025-02-15",
-      "personas": 2,
-      "estado": "pendiente"
-    }
-  ]
-}
-```
+#### Verificar Token
+**GET** `/api/verify-token`
 
-### 6. Verificar Token Válido
-```http
-GET /api/verify-token
-Headers: Authorization: Bearer {token}
-```
+#### Obtener Usuario Actual
+**GET** `/api/user`
 
-**Response (200) - Token válido:**
-```json
-{
-  "valid": true,
-  "user": {
-    "id": 1,
-    "name": "usuario123",
-    "email": "usuario@example.com",
-    "is_admin": false
-  },
-  "message": "Token válido"
-}
-```
+#### Cerrar Sesión
+**POST** `/api/logout`
 
-**Response (401) - Token inválido:**
-```json
-{
-  "valid": false,
-  "message": "Token inválido o expirado"
-}
-```
+#### Cerrar Todas las Sesiones
+**POST** `/api/logout-all`
 
-### 7. Cerrar Sesión (Token Actual)
-```http
-POST /api/logout
-Headers: Authorization: Bearer {token}
-```
+### Perfil de Usuario
 
-**Response (200):**
-```json
-{
-  "message": "Sesión cerrada exitosamente"
-}
-```
+#### Obtener Perfil
+**GET** `/api/profile`
 
-**Nota:** Solo revoca el token actual que se está usando.
-
-### 8. Cerrar Todas las Sesiones
-```http
-POST /api/logout-all
-Headers: Authorization: Bearer {token}
-```
-
-**Response (200):**
-```json
-{
-  "message": "Todas las sesiones han sido cerradas exitosamente"
-}
-```
-
-**Nota:** Revoca todos los tokens del usuario (útil para cerrar sesión en todos los dispositivos).
-
-### 9. Crear un Lugar *(solo administradores)*
-```http
-POST /api/places
-Headers: Authorization: Bearer {token}
-```
-
-**Requiere** que el usuario autenticado tenga `is_admin = true`.
+#### Actualizar Perfil
+**PUT** `/api/profile`
 
 **Body:**
 ```json
 {
-  "name": "Nuevo Lugar",
-  "description": "Descripción del lugar",
-  "location": "Ciudad, Departamento",
-  "image": "url_de_imagen.jpg"
+  "name": "nuevo_nombre",
+  "email": "nuevo@email.com"
 }
 ```
 
-**Response (201):**
-```json
-{
-  "id": 2,
-  "name": "Nuevo Lugar",
-  "description": "Descripción del lugar",
-  "location": "Ciudad, Departamento",
-  "image": "url_de_imagen.jpg",
-  "created_at": "2025-01-15T10:00:00.000000Z",
-  "updated_at": "2025-01-15T10:00:00.000000Z"
-}
-```
-
-### 10. Actualizar un Lugar *(solo administradores)*
-```http
-PUT /api/places/{id}
-Headers: Authorization: Bearer {token}
-```
-
-**Requiere** que el usuario autenticado tenga `is_admin = true`.
+#### Cambiar Contraseña
+**PUT** `/api/profile/password`
 
 **Body:**
 ```json
 {
-  "name": "Nombre Actualizado",
-  "description": "Nueva descripción"
+  "current_password": "password_actual",
+  "new_password": "nueva_password",
+  "new_password_confirmation": "nueva_password"
 }
 ```
 
-### 11. Eliminar un Lugar *(solo administradores)*
-```http
-DELETE /api/places/{id}
-Headers: Authorization: Bearer {token}
-```
+### Reservas
 
-**Requiere** que el usuario autenticado tenga `is_admin = true`.
+#### Obtener Mis Reservas
+**GET** `/api/reservations/my`
 
-**Response (200):**
-```json
-{
-  "message": "Lugar eliminado correctamente"
-}
-```
+#### Obtener Todas las Reservas (Admin)
+**GET** `/api/reservations`
 
-### 12. Obtener Mis Reservas
-```http
-GET /api/reservations/my
-Headers: Authorization: Bearer {token}
-```
-
-**Response (200):**
-```json
-[
-  {
-    "id": 1,
-    "user_id": 1,
-    "place_id": 1,
-    "fecha": "2025-02-15",
-    "personas": 2,
-    "estado": "pendiente",
-    "created_at": "2025-01-15T10:00:00.000000Z",
-    "updated_at": "2025-01-15T10:00:00.000000Z",
-    "place": {
-      "id": 1,
-      "name": "Parque del Café",
-      "description": "...",
-      "location": "..."
-    },
-    "usuario": {
-      "id": 1,
-      "name": "usuario123",
-      "email": "usuario@example.com"
-    }
-  }
-]
-```
-
-### 13. Obtener Todas las Reservas (del usuario autenticado)
-```http
-GET /api/reservations
-Headers: Authorization: Bearer {token}
-```
-
-**Nota:** Solo devuelve las reservas del usuario autenticado.
-
-### 14. Crear una Reserva
-```http
-POST /api/reservations
-Headers: Authorization: Bearer {token}
-```
+#### Crear Reserva
+**POST** `/api/reservations`
 
 **Body:**
 ```json
 {
   "place_id": 1,
-  "fecha": "2025-02-15",
+  "fecha_visita": "2025-12-25",
+  "hora_visita": "14:00",
   "personas": 2,
-  "estado": "pendiente"
+  "telefono_contacto": "3001234567",
+  "comentarios": "Comentarios adicionales",
+  "precio_total": 50000
 }
 ```
 
-**Validaciones:**
-- `place_id`: requerido, debe existir en la tabla places
-- `fecha`: requerido, debe ser una fecha válida y no puede ser anterior a hoy
-- `personas`: requerido, entero entre 1 y 50
-- `estado`: opcional, valores permitidos: "pendiente", "confirmada", "cancelada" (por defecto: "pendiente")
+#### Obtener una Reserva
+**GET** `/api/reservations/{id}`
 
-**Response (201):**
-```json
-{
-  "id": 1,
-  "user_id": 1,
-  "place_id": 1,
-  "fecha": "2025-02-15",
-  "personas": 2,
-  "estado": "pendiente",
-  "created_at": "2025-01-15T10:00:00.000000Z",
-  "updated_at": "2025-01-15T10:00:00.000000Z",
-  "place": { ... },
-  "usuario": { ... }
-}
-```
+#### Actualizar Reserva
+**PUT** `/api/reservations/{id}`
 
-### 15. Obtener una Reserva Específica
-```http
-GET /api/reservations/{id}
-Headers: Authorization: Bearer {token}
-```
+#### Eliminar Reserva
+**DELETE** `/api/reservations/{id}`
 
-**Nota:** Solo puedes ver tus propias reservas. Si intentas ver una reserva de otro usuario, recibirás un error 403.
+### Reseñas
 
-### 16. Actualizar una Reserva
-```http
-PUT /api/reservations/{id}
-Headers: Authorization: Bearer {token}
-```
+#### Crear Reseña
+**POST** `/api/reviews`
 
 **Body:**
 ```json
 {
-  "fecha": "2025-02-20",
-  "personas": 3,
-  "estado": "confirmada"
+  "place_id": 1,
+  "rating": 5,
+  "comment": "Excelente lugar"
 }
 ```
 
-**Nota:** Solo puedes actualizar tus propias reservas.
+#### Eliminar Reseña
+**DELETE** `/api/reviews/{id}`
 
-### 17. Eliminar una Reserva
-```http
-DELETE /api/reservations/{id}
-Headers: Authorization: Bearer {token}
-```
+### Favoritos
 
-**Response (200):**
+#### Obtener Mis Favoritos
+**GET** `/api/favorites`
+
+#### Agregar a Favoritos
+**POST** `/api/favorites`
+
+**Body:**
 ```json
 {
-  "message": "Reserva eliminada correctamente"
+  "place_id": 1
 }
 ```
 
-**Nota:** Solo puedes eliminar tus propias reservas.
+#### Eliminar de Favoritos
+**DELETE** `/api/favorites/{placeId}`
+
+### Lugares (Admin)
+
+#### Crear Lugar
+**POST** `/api/places` (Requiere admin)
+
+**Body:**
+```json
+{
+  "name": "Nuevo Lugar",
+  "description": "...",
+  "location": "...",
+  "image": "...",
+  "categories": [1, 2]
+}
+```
+
+#### Actualizar Lugar
+**PUT** `/api/places/{id}` (Requiere admin)
+
+#### Eliminar Lugar
+**DELETE** `/api/places/{id}` (Requiere admin)
+
+### Categorías (Admin)
+
+#### Crear Categoría
+**POST** `/api/categories` (Requiere admin)
+
+**Body:**
+```json
+{
+  "name": "Aventura",
+  "description": "...",
+  "icon": "🏔️"
+}
+```
+
+#### Actualizar Categoría
+**PUT** `/api/categories/{id}` (Requiere admin)
+
+#### Eliminar Categoría
+**DELETE** `/api/categories/{id}` (Requiere admin)
+
+### Pagos (Boceto)
+
+#### Obtener Mis Pagos
+**GET** `/api/payments`
+
+#### Crear Pago
+**POST** `/api/payments`
+
+**Body:**
+```json
+{
+  "reservation_id": 1,
+  "amount": 50000,
+  "payment_method": "transferencia"
+}
+```
 
 ---
 
 ## Códigos de Estado HTTP
 
-- `200` - OK (Éxito)
-- `201` - Created (Recurso creado exitosamente)
-- `204` - No Content (Eliminación exitosa)
-- `400` - Bad Request (Error de validación)
-- `401` - Unauthorized (No autenticado)
-- `403` - Forbidden (No autorizado)
-- `404` - Not Found (Recurso no encontrado)
-- `422` - Unprocessable Entity (Error de validación)
-- `500` - Internal Server Error (Error del servidor)
+- `200` - Éxito
+- `201` - Creado exitosamente
+- `401` - No autenticado
+- `403` - No autorizado (requiere permisos)
+- `404` - No encontrado
+- `422` - Error de validación
+- `500` - Error del servidor
 
 ---
 
-## Manejo de Errores
+## Errores de Validación
 
-Todos los errores se devuelven en formato JSON:
+Cuando hay errores de validación, la respuesta será:
 
 ```json
 {
-  "message": "Mensaje de error descriptivo",
+  "message": "Los datos proporcionados no son válidos.",
   "errors": {
-    "campo": ["Mensaje de error específico del campo"]
+    "campo": ["Mensaje de error"]
   }
 }
 ```
-
-**Ejemplo de error de validación (422):**
-```json
-{
-  "message": "The given data was invalid.",
-  "errors": {
-    "name": ["The name field is required."],
-    "password": ["The password must be at least 6 characters."]
-  }
-}
-```
-
-**Ejemplo de error de autorización (403):**
-```json
-{
-  "message": "No autorizado"
-}
-```
-
----
-
-## Relaciones de Modelos
-
-### Usuario (Usuarios)
-- `reservations` - HasMany: Todas las reservas del usuario
-
-### Lugar (Place)
-- `reservations` - HasMany: Todas las reservas del lugar
-
-### Reserva (Reservation)
-- `usuario` - BelongsTo: El usuario que hizo la reserva
-- `place` - BelongsTo: El lugar reservado
-
-Cuando obtengas reservas, puedes incluir estas relaciones automáticamente usando `with()` en las consultas.
 
 ---
 
 ## Notas Importantes
 
-1. **Seguridad:** Todas las rutas protegidas requieren el token de autenticación en el header `Authorization: Bearer {token}`.
-2. **Tokens:** 
-   - Los tokens expiran después de 30 días
-   - Al hacer login, se revocan los tokens anteriores del mismo nombre
-   - Puedes usar `/api/logout` para cerrar la sesión actual
-   - Puedes usar `/api/logout-all` para cerrar todas las sesiones
-   - Usa `/api/verify-token` para verificar si un token es válido
-3. **Login:** Puedes iniciar sesión usando `name` o `email` (solo necesitas uno de los dos).
-4. **Reservas:** Los usuarios solo pueden ver, modificar y eliminar sus propias reservas.
-5. **Lugares:** La lectura de lugares es pública, pero crear/actualizar/eliminar requiere autenticación.
-6. **Validaciones:** 
-   - Todas las fechas de reserva deben ser futuras (no se pueden hacer reservas en el pasado)
-   - El nombre de usuario solo puede contener letras, números y guiones bajos
-   - La contraseña debe tener al menos 6 caracteres
-7. **Roles:** Las operaciones de creación/actualización/eliminación de lugares solo están disponibles para usuarios con `is_admin = true`.
-
----
-
-## Roles y permisos
-
-- `is_admin = false` (por defecto): puede autenticarse, consultar lugares públicos y gestionar únicamente sus reservas.
-- `is_admin = true`: además de lo anterior, puede crear, actualizar y eliminar registros en `places` desde los endpoints protegidos.
-- Puedes promover un usuario a administrador editando la columna `is_admin` (por ejemplo desde la base de datos o con un seeder).
-
----
-
-## Ejemplo de Uso con Fetch (JavaScript)
-
-```javascript
-// Login
-const loginResponse = await fetch('http://tu-dominio.com/api/login', {
-  method: 'POST',
-  headers: {
-    'Content-Type': 'application/json',
-  },
-  body: JSON.stringify({
-    name: 'usuario123',
-    password: 'password123'
-  })
-});
-
-const { token, user } = await loginResponse.json();
-
-// Guardar el token (ej: localStorage)
-localStorage.setItem('token', token);
-
-// Hacer petición autenticada
-const placesResponse = await fetch('http://tu-dominio.com/api/places', {
-  headers: {
-    'Authorization': `Bearer ${token}`,
-    'Content-Type': 'application/json',
-  }
-});
-
-const places = await placesResponse.json();
-```
-
----
-
-## Próximos Pasos Sugeridos
-
-1. Implementar roles de usuario (admin, usuario normal)
-2. Agregar paginación a las listas
-3. Implementar búsqueda y filtros
-4. Agregar sistema de comentarios/reseñas
-5. Implementar notificaciones
-6. Agregar subida de imágenes
-7. Implementar sistema de favoritos
-
+1. Todos los tokens expiran después de 30 días
+2. Las rutas de admin requieren que el usuario tenga `is_admin: true`
+3. Las fechas deben estar en formato ISO 8601 (YYYY-MM-DD)
+4. Las horas deben estar en formato 24 horas (HH:mm)
+5. El sistema de pagos es un BOCETO y no está completamente funcional

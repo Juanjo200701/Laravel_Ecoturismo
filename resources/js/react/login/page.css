@@ -151,10 +151,24 @@ html, body, #root {
 /* MENSAJES */
 .message {
   margin-top: 12px;
+  padding: 10px;
+  border-radius: 4px;
   font-size: 14px;
   font-weight: 600;
-  color: #e74c3c;
   min-height: 18px;
+  text-align: center;
+}
+
+.message.error {
+  background-color: #fee;
+  color: #c33;
+  border: 1px solid #fcc;
+}
+
+.message.success {
+  background-color: #efe;
+  color: #3c3;
+  border: 1px solid #cfc;
 }
 
 /* FOOTER */

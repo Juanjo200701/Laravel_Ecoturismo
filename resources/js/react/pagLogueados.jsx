@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import "./index.css";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "./context/AuthContext";
 import Header2 from "@/react/components/Header2/Header2";
 import Footer from "@/react/components/Footer/Footer";
 // import Card from '@/react/components/Cards/Card';
@@ -8,17 +9,31 @@ import Slider from "@/react/components/slider/Slider";
 
 function PagLogueados() {
   const navigate = useNavigate();
-  const user = window.Laravel?.user || null;
+  const { user, isAuthenticated, loading } = useAuth();
 
   // Validar que el usuario esté autenticado
   useEffect(() => {
-    if (!user) {
+    if (!loading && !isAuthenticated) {
       navigate('/login', { replace: true });
     }
-  }, [user, navigate]);
+  }, [isAuthenticated, loading, navigate]);
 
-  // Si no hay usuario, no renderizar nada
-  if (!user) {
+  // Mostrar loading mientras se verifica
+  if (loading) {
+    return (
+      <div style={{ 
+        display: 'flex', 
+        justifyContent: 'center', 
+        alignItems: 'center', 
+        height: '100vh' 
+      }}>
+        <p>Cargando...</p>
+      </div>
+    );
+  }
+
+  // Si no hay usuario autenticado, no renderizar nada (será redirigido)
+  if (!isAuthenticated || !user) {
     return null;
   }
 

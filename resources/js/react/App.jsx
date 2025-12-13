@@ -1,5 +1,6 @@
 import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "./context/AuthContext";
 import "./index.css";
 import Header from "./components/Header/Header";
 import Header2 from "./components/Header2/Header2";
@@ -7,21 +8,37 @@ import Footer from "./components/Footer/Footer";
 import Slider from "./components/slider/Slider";
 
 function App() {
-  // Obtener datos del usuario si están disponibles
-  const user = window.Laravel?.user || null;
-  const isAdmin = window.Laravel?.isAdmin || false;
+  const { user, isAuthenticated, loading } = useAuth();
   const navigate = useNavigate();
 
   // Si el usuario está logueado, redirigir a pagLogueados
+  // Solo redirigir si no está en la página de login/registro
   useEffect(() => {
-    if (user) {
-      navigate('/pagLogueados', { replace: true });
+    if (!loading && isAuthenticated && user) {
+      const currentPath = window.location.pathname;
+      // No redirigir si está en login o registro (dejar que esos componentes manejen la redirección)
+      if (currentPath !== '/login' && currentPath !== '/registro') {
+        navigate('/pagLogueados', { replace: true });
+      }
     }
-  }, [user, navigate]);
+  }, [isAuthenticated, user, loading, navigate]);
+
+  if (loading) {
+    return (
+      <div style={{ 
+        display: 'flex', 
+        justifyContent: 'center', 
+        alignItems: 'center', 
+        height: '100vh' 
+      }}>
+        <p>Cargando...</p>
+      </div>
+    );
+  }
 
   return (
     <>
-      {user ? <Header2 /> : <Header />}
+      {isAuthenticated && user ? <Header2 /> : <Header />}
 
       <main>
         <Slider />

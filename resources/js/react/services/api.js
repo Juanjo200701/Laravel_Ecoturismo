@@ -1,0 +1,231 @@
+import axios from 'axios';
+
+// Configurar la URL base de la API
+// Usar URL relativa si está en el mismo dominio, o absoluta si es necesario
+const API_URL = import.meta.env.VITE_API_URL || '/api';
+
+// Crear instancia de axios
+const api = axios.create({
+  baseURL: API_URL,
+  headers: {
+    'Content-Type': 'application/json',
+    'Accept': 'application/json',
+  },
+  withCredentials: false, // No necesario para tokens Bearer, solo para cookies
+});
+
+// Interceptor para agregar el token a las peticiones
+api.interceptors.request.use(
+  (config) => {
+    const token = localStorage.getItem('token');
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
+    return config;
+  },
+  (error) => {
+    return Promise.reject(error);
+  }
+);
+
+// Interceptor para manejar errores de respuesta
+api.interceptors.response.use(
+  (response) => {
+    return response;
+  },
+  (error) => {
+    // Si el token expiró o es inválido, limpiar y redirigir al login
+    // Pero solo si no estamos ya en la página de login
+    if (error.response?.status === 401) {
+      const currentPath = window.location.pathname;
+      if (currentPath !== '/login' && currentPath !== '/registro') {
+        localStorage.removeItem('token');
+        localStorage.removeItem('user');
+        window.location.href = '/login';
+      }
+    }
+    
+    // Log de errores para debugging
+    if (error.response) {
+      console.error('Error de API:', {
+        status: error.response.status,
+        data: error.response.data,
+        url: error.config?.url
+      });
+    } else if (error.request) {
+      console.error('Error de red:', error.request);
+    } else {
+      console.error('Error:', error.message);
+    }
+    
+    return Promise.reject(error);
+  }
+);
+
+// Servicios de autenticación
+export const authService = {
+  // Login
+  login: async (credentials) => {
+    const response = await api.post('/login', credentials);
+    return response.data;
+  },
+
+  // Registro
+  register: async (userData) => {
+    const response = await api.post('/register', userData);
+    return response.data;
+  },
+
+  // Logout
+  logout: async () => {
+    try {
+      await api.post('/logout');
+    } catch (error) {
+      console.error('Error al cerrar sesión:', error);
+    } finally {
+      localStorage.removeItem('token');
+      localStorage.removeItem('user');
+    }
+  },
+
+  // Verificar token
+  verifyToken: async () => {
+    const response = await api.get('/verify-token');
+    return response.data;
+  },
+
+  // Obtener usuario actual
+  getCurrentUser: async () => {
+    const response = await api.get('/user');
+    return response.data;
+  },
+};
+
+// Servicios de lugares
+export const placesService = {
+  getAll: async (params = {}) => {
+    const response = await api.get('/places', { params });
+    return response.data;
+  },
+
+  getById: async (id) => {
+    const response = await api.get(`/places/${id}`);
+    return response.data;
+  },
+
+  create: async (placeData) => {
+    const response = await api.post('/places', placeData);
+    return response.data;
+  },
+
+  update: async (id, placeData) => {
+    const response = await api.put(`/places/${id}`, placeData);
+    return response.data;
+  },
+
+  delete: async (id) => {
+    const response = await api.delete(`/places/${id}`);
+    return response.data;
+  },
+};
+
+// Servicios de reservas
+export const reservationsService = {
+  getMyReservations: async () => {
+    const response = await api.get('/reservations/my');
+    return response.data;
+  },
+
+  create: async (reservationData) => {
+    const response = await api.post('/reservations', reservationData);
+    return response.data;
+  },
+
+  update: async (id, reservationData) => {
+    const response = await api.put(`/reservations/${id}`, reservationData);
+    return response.data;
+  },
+
+  delete: async (id) => {
+    const response = await api.delete(`/reservations/${id}`);
+    return response.data;
+  },
+};
+
+// Servicios de reseñas
+export const reviewsService = {
+  getByPlace: async (placeId) => {
+    const response = await api.get(`/places/${placeId}/reviews`);
+    return response.data;
+  },
+
+  create: async (reviewData) => {
+    const response = await api.post('/reviews', reviewData);
+    return response.data;
+  },
+
+  delete: async (id) => {
+    const response = await api.delete(`/reviews/${id}`);
+    return response.data;
+  },
+};
+
+// Servicios de favoritos
+export const favoritesService = {
+  getAll: async () => {
+    const response = await api.get('/favorites');
+    return response.data;
+  },
+
+  add: async (placeId) => {
+    const response = await api.post('/favorites', { place_id: placeId });
+    return response.data;
+  },
+
+  remove: async (placeId) => {
+    const response = await api.delete(`/favorites/${placeId}`);
+    return response.data;
+  },
+};
+
+// Servicios de categorías
+export const categoriesService = {
+  getAll: async () => {
+    const response = await api.get('/categories');
+    return response.data;
+  },
+
+  getById: async (id) => {
+    const response = await api.get(`/categories/${id}`);
+    return response.data;
+  },
+};
+
+// Servicios de perfil
+export const profileService = {
+  get: async () => {
+    const response = await api.get('/profile');
+    return response.data;
+  },
+
+  update: async (profileData) => {
+    const response = await api.put('/profile', profileData);
+    return response.data;
+  },
+
+  changePassword: async (passwordData) => {
+    const response = await api.put('/profile/password', passwordData);
+    return response.data;
+  },
+};
+
+// Servicios de mensajes
+export const messagesService = {
+  send: async (messageData) => {
+    const response = await api.post('/messages', messageData);
+    return response.data;
+  },
+};
+
+export default api;
+

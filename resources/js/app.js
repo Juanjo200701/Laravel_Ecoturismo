@@ -3,6 +3,10 @@ import { createRoot } from 'react-dom/client';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import './react/index.css';
 
+// Importar AuthProvider
+import { AuthProvider } from './react/context/AuthContext';
+import { ProtectedRoute } from './react/components/ProtectedRoute';
+
 // Importar componentes
 import App from './react/App.jsx';
 import ContactPage from './react/contact/Contacto.jsx';
@@ -60,15 +64,27 @@ const router = createBrowserRouter([
   },
   {
     path: '/pagLogueados',
-    element: <PagLogueados />,
+    element: (
+      <ProtectedRoute>
+        <PagLogueados />
+      </ProtectedRoute>
+    ),
   },
   {
     path: '/configuracion',
-    element: <PerfilPage />,
+    element: (
+      <ProtectedRoute>
+        <PerfilPage />
+      </ProtectedRoute>
+    ),
   },
   {
     path: '/perfil',
-    element: <PerfilPage />,
+    element: (
+      <ProtectedRoute>
+        <PerfilPage />
+      </ProtectedRoute>
+    ),
   },
   // Rutas de lugares
   {
@@ -98,5 +114,9 @@ const router = createBrowserRouter([
 // Montar la aplicación React
 const rootElement = document.getElementById('root');
 if (rootElement) {
-  createRoot(rootElement).render(<RouterProvider router={router} />);
+  createRoot(rootElement).render(
+    <AuthProvider>
+      <RouterProvider router={router} />
+    </AuthProvider>
+  );
 }

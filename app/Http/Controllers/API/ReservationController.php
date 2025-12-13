@@ -18,7 +18,8 @@ class ReservationController extends Controller
         $user = $request->user();
         $reservations = Reservation::where('user_id', $user->id)
             ->with(['place', 'usuario'])
-            ->orderBy('fecha', 'desc')
+            ->orderBy('fecha_visita', 'desc')
+            ->orderBy('created_at', 'desc')
             ->get();
 
         return response()->json($reservations);
@@ -31,9 +32,15 @@ class ReservationController extends Controller
     public function all(Request $request): JsonResponse
     {
         $user = $request->user();
-        $reservations = Reservation::where('user_id', $user->id)
-            ->with(['place', 'usuario'])
-            ->orderBy('fecha', 'desc')
+        
+        // Solo admin puede ver todas las reservas
+        if (!$user->is_admin) {
+            return response()->json(['message' => 'No autorizado'], 403);
+        }
+        
+        $reservations = Reservation::with(['place', 'usuario'])
+            ->orderBy('fecha_visita', 'desc')
+            ->orderBy('created_at', 'desc')
             ->get();
 
         return response()->json($reservations);
@@ -48,22 +55,50 @@ class ReservationController extends Controller
 
         $data = $request->validate([
             'place_id' => 'required|exists:places,id',
-            'fecha' => 'required|date|after_or_equal:today',
+            'fecha_visita' => 'required|date|after_or_equal:today',
+            'hora_visita' => 'nullable|date_format:H:i',
             'personas' => 'required|integer|min:1|max:50',
+            'telefono_contacto' => 'nullable|string|max:20',
+            'comentarios' => 'nullable|string|max:1000',
+            'precio_total' => 'nullable|numeric|min:0',
             'estado' => 'sometimes|string|in:pendiente,confirmada,cancelada',
+        ], [
+            'place_id.required' => 'El lugar es requerido.',
+            'place_id.exists' => 'El lugar seleccionado no existe.',
+            'fecha_visita.required' => 'La fecha de visita es requerida.',
+            'fecha_visita.date' => 'La fecha de visita debe ser una fecha válida.',
+            'fecha_visita.after_or_equal' => 'La fecha de visita debe ser hoy o una fecha futura.',
+            'hora_visita.date_format' => 'La hora debe tener el formato HH:mm.',
+            'personas.required' => 'El número de personas es requerido.',
+            'personas.integer' => 'El número de personas debe ser un número entero.',
+            'personas.min' => 'Debe haber al menos 1 persona.',
+            'personas.max' => 'No puede haber más de 50 personas.',
+            'telefono_contacto.max' => 'El teléfono no puede exceder 20 caracteres.',
+            'comentarios.max' => 'Los comentarios no pueden exceder 1000 caracteres.',
+            'precio_total.numeric' => 'El precio debe ser un número.',
+            'precio_total.min' => 'El precio no puede ser negativo.',
         ]);
 
         $reservation = Reservation::create([
             'user_id' => $user->id,
             'place_id' => $data['place_id'],
-            'fecha' => $data['fecha'],
+            'fecha_reserva' => now(),
+            'fecha_visita' => $data['fecha_visita'],
+            'hora_visita' => $data['hora_visita'] ?? null,
+            'fecha' => $data['fecha_visita'], // Mantener compatibilidad
             'personas' => $data['personas'],
+            'telefono_contacto' => $data['telefono_contacto'] ?? null,
+            'comentarios' => $data['comentarios'] ?? null,
+            'precio_total' => $data['precio_total'] ?? null,
             'estado' => $data['estado'] ?? 'pendiente',
         ]);
 
         $reservation->load(['place', 'usuario']);
 
-        return response()->json($reservation, 201);
+        return response()->json([
+            'message' => 'Reserva creada correctamente.',
+            'reservation' => $reservation
+        ], 201);
     }
 
     /**
@@ -96,10 +131,30 @@ class ReservationController extends Controller
         }
 
         $data = $request->validate([
-            'fecha' => 'sometimes|date|after_or_equal:today',
+            'fecha_visita' => 'sometimes|date|after_or_equal:today',
+            'hora_visita' => 'nullable|date_format:H:i',
             'personas' => 'sometimes|integer|min:1|max:50',
+            'telefono_contacto' => 'nullable|string|max:20',
+            'comentarios' => 'nullable|string|max:1000',
+            'precio_total' => 'nullable|numeric|min:0',
             'estado' => 'sometimes|string|in:pendiente,confirmada,cancelada',
+        ], [
+            'fecha_visita.date' => 'La fecha de visita debe ser una fecha válida.',
+            'fecha_visita.after_or_equal' => 'La fecha de visita debe ser hoy o una fecha futura.',
+            'hora_visita.date_format' => 'La hora debe tener el formato HH:mm.',
+            'personas.integer' => 'El número de personas debe ser un número entero.',
+            'personas.min' => 'Debe haber al menos 1 persona.',
+            'personas.max' => 'No puede haber más de 50 personas.',
+            'telefono_contacto.max' => 'El teléfono no puede exceder 20 caracteres.',
+            'comentarios.max' => 'Los comentarios no pueden exceder 1000 caracteres.',
+            'precio_total.numeric' => 'El precio debe ser un número.',
+            'precio_total.min' => 'El precio no puede ser negativo.',
         ]);
+
+        // Si se actualiza fecha_visita, también actualizar fecha para compatibilidad
+        if (isset($data['fecha_visita'])) {
+            $data['fecha'] = $data['fecha_visita'];
+        }
 
         $reservation->update($data);
         $reservation->load(['place', 'usuario']);
@@ -132,7 +187,8 @@ class ReservationController extends Controller
         $user = $request->user();
         $reservations = Reservation::where('user_id', $user->id)
             ->with(['place', 'usuario'])
-            ->orderBy('fecha', 'desc')
+            ->orderBy('fecha_visita', 'desc')
+            ->orderBy('created_at', 'desc')
             ->get();
 
         return response()->json($reservations);

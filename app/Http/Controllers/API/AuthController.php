@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use App\Models\Usuarios;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\ValidationException;
 
 class AuthController extends Controller
@@ -64,58 +65,96 @@ class AuthController extends Controller
     public function login(Request $request): JsonResponse
     {
         // Validar que se proporcione al menos un campo de identificación
-        $request->validate([
-            'name' => 'required_without:email|string|max:255',
-            'email' => 'required_without:name|email|max:255',
-            'password' => 'required|string|min:1',
-        ], [
-            'name.required_without' => 'Debe proporcionar un nombre de usuario o email.',
-            'email.required_without' => 'Debe proporcionar un nombre de usuario o email.',
-            'email.email' => 'El email debe ser una dirección válida.',
-            'password.required' => 'La contraseña es requerida.',
-        ]);
-
-        // Buscar usuario por name o email
-        $user = null;
-        if ($request->filled('name')) {
-            $user = Usuarios::where('name', $request->name)->first();
-        } elseif ($request->filled('email')) {
-            $user = Usuarios::where('email', $request->email)->first();
-        }
-
-        // Validar credenciales
-        if (!$user) {
-            throw ValidationException::withMessages([
-                'credentials' => ['Las credenciales proporcionadas son incorrectas.']
+        try {
+            $request->validate([
+                'name' => 'required_without:email|string|max:255',
+                'email' => 'required_without:name|email|max:255',
+                'password' => 'required|string|min:1',
+            ], [
+                'name.required_without' => 'Debe proporcionar un nombre de usuario o email.',
+                'email.required_without' => 'Debe proporcionar un nombre de usuario o email.',
+                'email.email' => 'El email debe ser una dirección válida.',
+                'password.required' => 'La contraseña es requerida.',
             ]);
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            return response()->json([
+                'message' => 'Error de validación',
+                'errors' => $e->errors()
+            ], 422);
         }
 
-        if (!Hash::check($request->password, $user->password)) {
-            throw ValidationException::withMessages([
-                'credentials' => ['Las credenciales proporcionadas son incorrectas.']
+        try {
+            // Buscar usuario por name o email
+            $user = null;
+            
+            if ($request->filled('name')) {
+                $user = Usuarios::where('name', $request->name)->first();
+            } elseif ($request->filled('email')) {
+                $user = Usuarios::where('email', $request->email)->first();
+            }
+
+            // Validar que el usuario exista
+            if (!$user) {
+                Log::warning('Intento de login fallido - Usuario no encontrado', [
+                    'name' => $request->name,
+                    'email' => $request->email,
+                ]);
+                return response()->json([
+                    'message' => 'Las credenciales proporcionadas son incorrectas.',
+                    'errors' => [
+                        'credentials' => ['No se encontró un usuario con esas credenciales.']
+                    ]
+                ], 422);
+            }
+
+            // Validar contraseña
+            if (!Hash::check($request->password, $user->password)) {
+                Log::warning('Intento de login fallido - Contraseña incorrecta', [
+                    'user_id' => $user->id,
+                    'user_name' => $user->name,
+                ]);
+                return response()->json([
+                    'message' => 'Las credenciales proporcionadas son incorrectas.',
+                    'errors' => [
+                        'credentials' => ['La contraseña es incorrecta.']
+                    ]
+                ], 422);
+            }
+
+            // Crear token de autenticación
+            // Revocar tokens anteriores del mismo dispositivo si existe
+            $user->tokens()->where('name', 'api-token')->delete();
+            
+            // Crear nuevo token
+            $token = $user->createToken('api-token', ['*'], now()->addDays(30))->plainTextToken;
+
+            Log::info('Login exitoso', [
+                'user_id' => $user->id,
+                'user_name' => $user->name,
             ]);
+
+            return response()->json([
+                'message' => 'Inicio de sesión exitoso',
+                'user' => [
+                    'id' => $user->id,
+                    'name' => $user->name,
+                    'email' => $user->email,
+                    'fecha_registro' => $user->fecha_registro,
+                    'is_admin' => $user->is_admin,
+                ],
+                'token' => $token,
+                'token_type' => 'Bearer',
+                'expires_in' => 30 * 24 * 60 * 60, // 30 días en segundos
+            ], 200);
+        } catch (\Exception $e) {
+            Log::error('Error al procesar login: ' . $e->getMessage(), [
+                'trace' => $e->getTraceAsString(),
+            ]);
+            return response()->json([
+                'message' => 'Error al procesar el inicio de sesión. Por favor, intenta de nuevo.',
+                'error' => config('app.debug') ? $e->getMessage() : null
+            ], 500);
         }
-
-        // Crear token de autenticación
-        // Revocar tokens anteriores del mismo dispositivo si existe
-        $user->tokens()->where('name', 'api-token')->delete();
-        
-        // Crear nuevo token
-        $token = $user->createToken('api-token', ['*'], now()->addDays(30))->plainTextToken;
-
-        return response()->json([
-            'message' => 'Inicio de sesión exitoso',
-            'user' => [
-                'id' => $user->id,
-                'name' => $user->name,
-                'email' => $user->email,
-                'fecha_registro' => $user->fecha_registro,
-                'is_admin' => $user->is_admin,
-            ],
-            'token' => $token,
-            'token_type' => 'Bearer',
-            'expires_in' => 30 * 24 * 60 * 60, // 30 días en segundos
-        ], 200);
     }
 
     /**

@@ -1,36 +1,74 @@
-import { useState } from "react";
-import { useLocation, Link } from "react-router-dom";
-import axios from "axios";
+import { useState, useEffect } from "react";
+import { useLocation, Link, useNavigate } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
 import "./page.css";
 
 export default function Login() {
   const location = useLocation();
+  const navigate = useNavigate();
+  const { login, register, isAuthenticated } = useAuth();
   const isRegister = location.pathname === "/registro";
+  
   const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [passwordConfirmation, setPasswordConfirmation] = useState("");
   const [errors, setErrors] = useState({});
   const [msg, setMsg] = useState("");
+  const [loading, setLoading] = useState(false);
 
-  const login = async (e) => {
+  // Si ya está autenticado, redirigir a la página de usuarios logueados
+  useEffect(() => {
+    if (isAuthenticated) {
+      navigate("/pagLogueados", { replace: true });
+    }
+  }, [isAuthenticated, navigate]);
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setErrors({});
     setMsg("");
+    setLoading(true);
 
     try {
-      await axios.post("/login", {
-        name: username, // Laravel espera "name" o "email"
-        password,
-      });
-
-      window.location.href = "/"; // login OK
-    } catch (error) {
-      if (error.response?.status === 422) {
-        setErrors(error.response.data.errors);
-      } else if (error.response?.status === 401) {
-        setMsg("Credenciales incorrectas");
+      let result;
+      
+      if (isRegister) {
+        // Registro
+        result = await register({
+          name: username,
+          email: email || null,
+          password,
+          password_confirmation: passwordConfirmation,
+        });
       } else {
-        setMsg("Error del servidor");
+        // Login
+        result = await login({
+          name: username,
+          password,
+        });
       }
+
+      if (result.success) {
+        // Mostrar mensaje de éxito brevemente
+        setMsg("¡Inicio de sesión exitoso! Redirigiendo...");
+        // Pequeño delay para asegurar que el estado se actualice
+        setTimeout(() => {
+          navigate("/pagLogueados", { replace: true });
+        }, 500);
+      } else {
+        // Mostrar error específico
+        const errorMsg = result.error || "Error al procesar la solicitud";
+        setMsg(errorMsg);
+        if (result.errors) {
+          setErrors(result.errors);
+        }
+        setLoading(false);
+      }
+    } catch (error) {
+      console.error("Error inesperado:", error);
+      setMsg("Error inesperado. Por favor, intenta de nuevo.");
+      setLoading(false);
     }
   };
 
@@ -45,43 +83,87 @@ export default function Login() {
           <h1>Risaralda EcoTurismo</h1>
         </header>
 
-        <form className="login-card" onSubmit={login}>
-          <label>Nombre de usuario o Email:</label>
-        <input
-          type="text"
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
-          required
-        />
-        {errors.name && <p className="error">{errors.name[0]}</p>}
-        {errors.email && <p className="error">{errors.email[0]}</p>}
+        <form className="login-card" onSubmit={handleSubmit}>
+          <h2>{isRegister ? "Registro" : "Iniciar Sesión"}</h2>
+          
+          <label>Nombre de usuario:</label>
+          <input
+            type="text"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+            required
+            placeholder="Ingresa tu nombre de usuario"
+          />
+          {errors.name && <p className="error">{Array.isArray(errors.name) ? errors.name[0] : errors.name}</p>}
 
-        <label>Contraseña:</label>
-        <input
-          type="password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          required
-        />
-        {errors.password && <p className="error">{errors.password[0]}</p>}
+          {isRegister && (
+            <>
+              <label>Email (opcional):</label>
+              <input
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="tu@email.com"
+              />
+              {errors.email && <p className="error">{Array.isArray(errors.email) ? errors.email[0] : errors.email}</p>}
+            </>
+          )}
 
-        {!isRegister && (
-          <p className="register-text">
-            ¿Todavía no tienes cuenta? <Link to="/registro">Regístrate</Link>
-          </p>
-        )}
+          <label>Contraseña:</label>
+          <input
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+            placeholder="Ingresa tu contraseña"
+          />
+          {errors.password && <p className="error">{Array.isArray(errors.password) ? errors.password[0] : errors.password}</p>}
 
-        {isRegister && (
-          <p className="register-text">
-            ¿Ya tienes cuenta? <Link to="/login">Inicia sesión</Link>
-          </p>
-        )}
+          {isRegister && (
+            <>
+              <label>Confirmar contraseña:</label>
+              <input
+                type="password"
+                value={passwordConfirmation}
+                onChange={(e) => setPasswordConfirmation(e.target.value)}
+                required
+                placeholder="Confirma tu contraseña"
+              />
+              {errors.password_confirmation && <p className="error">{Array.isArray(errors.password_confirmation) ? errors.password_confirmation[0] : errors.password_confirmation}</p>}
+            </>
+          )}
 
-        <button type="submit">
-          {isRegister ? "Registrarse" : "Iniciar sesión"}
-        </button>
+          {!isRegister && (
+            <p className="register-text">
+              ¿Todavía no tienes cuenta? <Link to="/registro">Regístrate</Link>
+            </p>
+          )}
 
-          {msg && <p className="message">{msg}</p>}
+          {isRegister && (
+            <p className="register-text">
+              ¿Ya tienes cuenta? <Link to="/login">Inicia sesión</Link>
+            </p>
+          )}
+
+          {msg && (
+            <p className={`message ${
+              msg.includes("Error") || 
+              msg.includes("incorrectas") || 
+              msg.includes("incorrecta") || 
+              msg.includes("requerida") ||
+              msg.includes("inválido")
+                ? "error" 
+                : msg.includes("exitoso") || msg.includes("Redirigiendo")
+                ? "success"
+                : ""
+            }`}>
+              {msg}
+            </p>
+          )}
+
+          <button type="submit" disabled={loading}>
+            {loading ? "Procesando..." : isRegister ? "Registrarse" : "Iniciar sesión"}
+          </button>
         </form>
 
         <footer className="footer">© 2025 Risaralda EcoTurismo</footer>

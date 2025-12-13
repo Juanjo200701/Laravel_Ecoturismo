@@ -6,15 +6,41 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use App\Models\Place;
+use App\Models\Category;
 
 class PlaceController extends Controller
 {
     /**
      * Obtener todos los lugares (público)
      */
-    public function index(): JsonResponse
+    public function index(Request $request): JsonResponse
     {
-        $places = Place::orderBy('name', 'asc')->get();
+        $query = Place::query();
+        
+        // Filtrar por categoría si se proporciona
+        if ($request->has('category_id')) {
+            $query->whereHas('categories', function($q) use ($request) {
+                $q->where('categories.id', $request->category_id);
+            });
+        }
+        
+        // Búsqueda por nombre
+        if ($request->has('search')) {
+            $query->where('name', 'like', '%' . $request->search . '%')
+                  ->orWhere('description', 'like', '%' . $request->search . '%');
+        }
+        
+        $places = $query->with(['categories', 'reviews'])
+            ->orderBy('name', 'asc')
+            ->get();
+        
+        // Agregar información de rating a cada lugar
+        $places->transform(function($place) {
+            $place->average_rating = round($place->reviews->avg('rating') ?? 0, 1);
+            $place->reviews_count = $place->reviews->count();
+            return $place;
+        });
+        
         return response()->json($places);
     }
 
@@ -28,10 +54,27 @@ class PlaceController extends Controller
             'description' => 'nullable|string',
             'location' => 'nullable|string|max:255',
             'image' => 'nullable|string|max:500',
+            'categories' => 'nullable|array',
+            'categories.*' => 'exists:categories,id',
+        ], [
+            'name.required' => 'El nombre del lugar es requerido.',
+            'categories.array' => 'Las categorías deben ser un array.',
+            'categories.*.exists' => 'Una o más categorías no existen.',
         ]);
 
         $place = Place::create($data);
-        return response()->json($place, 201);
+        
+        // Asociar categorías si se proporcionan
+        if (isset($data['categories'])) {
+            $place->categories()->sync($data['categories']);
+        }
+        
+        $place->load('categories');
+        
+        return response()->json([
+            'message' => 'Lugar creado correctamente.',
+            'place' => $place
+        ], 201);
     }
 
     /**
@@ -39,8 +82,17 @@ class PlaceController extends Controller
      */
     public function show(Place $place): JsonResponse
     {
-        $place->load('reservations');
-        return response()->json($place);
+        $place->load(['reservations', 'reviews.usuario', 'categories']);
+        
+        // Calcular rating promedio
+        $averageRating = $place->reviews->avg('rating') ?? 0;
+        $reviewsCount = $place->reviews->count();
+        
+        return response()->json([
+            'place' => $place,
+            'average_rating' => round($averageRating, 1),
+            'reviews_count' => $reviewsCount,
+        ]);
     }
 
     /**
@@ -53,10 +105,26 @@ class PlaceController extends Controller
             'description' => 'nullable|string',
             'location' => 'nullable|string|max:255',
             'image' => 'nullable|string|max:500',
+            'categories' => 'nullable|array',
+            'categories.*' => 'exists:categories,id',
+        ], [
+            'categories.array' => 'Las categorías deben ser un array.',
+            'categories.*.exists' => 'Una o más categorías no existen.',
         ]);
 
         $place->update($data);
-        return response()->json($place);
+        
+        // Actualizar categorías si se proporcionan
+        if (isset($data['categories'])) {
+            $place->categories()->sync($data['categories']);
+        }
+        
+        $place->load('categories');
+        
+        return response()->json([
+            'message' => 'Lugar actualizado correctamente.',
+            'place' => $place
+        ]);
     }
 
     /**
